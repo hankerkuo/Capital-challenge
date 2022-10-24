@@ -1,18 +1,20 @@
-import styles from 'src/styles/AnswerRecord.module.module.css'
+import type { TAnswerRecord } from 'src/types/TQuest';
 
-const AnswerRecord = ({answerRecord}: {answerRecord: Array<{country: string; capital: string}>}) => {
+import styles from 'src/styles/AnswerRecord.module.css'
+
+const AnswerRecord = ({answerRecord}: {answerRecord: TAnswerRecord}) => {
   return(
     <div className={styles.answerRecordTable}>
       <div className={styles.title}>
-        <div>Country</div>
-        <div>Capital</div>
-        <div>Time spent</div>
+        <div className={styles.col1Layout}>Country</div>
+        <div className={styles.col2Layout}>Capital</div>
+        <div className={styles.col3Layout}>Time spent</div>
       </div>
       {answerRecord.map(singleAnswer => 
         <div key={singleAnswer.country} className={styles.singleRow}>
-          <div>{singleAnswer.country}</div>
-          <div>{singleAnswer.capital}</div>
-          <div>1000</div>
+          <div className={styles.col1Layout}>{singleAnswer.country}</div>
+          <div className={styles.col2Layout}>{singleAnswer.capital}</div>
+          <div className={styles.col3Layout}>{singleAnswer.timeSpent}</div>
         </div>
       )}
     </div>

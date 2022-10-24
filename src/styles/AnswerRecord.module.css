@@ -1,3 +1,7 @@
+.answerRecordTable {
+  color: #fff;
+}
+
 .title {
   display: flex;
 }
@@ -5,3 +9,12 @@
 .singleRow {
   display: flex;
 }
+
+.col1Layout {
+  width: 100px
+}
+
+.col2Layout {
+  width: 100px
+}
+

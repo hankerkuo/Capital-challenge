@@ -1,6 +1,6 @@
 import {render, screen} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
+
 import AnswerRecord from 'src/components/AnswerRecord'
 
 test('display answer record on table properly', () => {
@@ -8,25 +8,37 @@ test('display answer record on table properly', () => {
   const answerRecord = [
     {
       country: 'Taiwan',
-      capital: 'Taipei'
+      capital: 'Taipei',
+      timeSpent: 200
     },
     {
       country: 'Japan',
-      capital: 'Tokyo'
+      capital: 'Tokyo',
+      timeSpent: 300
     },
   ];
 
-  // ARRANGE
+  // RENDER target
   render(<AnswerRecord answerRecord={answerRecord} />);
 
-  // ACT
-  screen.findByRole('heading');
+  // debug print
   screen.debug();
-
-  // call thrid-party service to debug
-  screen.logTestingPlaygroundURL();
   
-  // ASSERT
-  // expect(screen.getByRole('heading')).toHaveTextContent('hello there');
-  // expect(screen.getByRole('button')).toBeDisabled();
+  // check table label is present
+  const tableLabel1 = screen.queryByText(/country/i);
+  expect(tableLabel1).not.toBeNull();
+  const tableLabel2 = screen.queryByText(/Capital/i);
+  expect(tableLabel2).not.toBeNull();
+  const tableLabel3 = screen.queryByText(/Time spent/i);
+  expect(tableLabel3).not.toBeNull();
+  
+  // check each record in the list has been displayed on the screen
+  answerRecord.forEach(ele => {
+    let countryToCheck = screen.queryByText(ele.country);
+    expect(countryToCheck).not.toBeNull();
+    let capitalToCheck = screen.queryByText(ele.capital);
+    expect(capitalToCheck).not.toBeNull();
+    let timeSpentToCheck = screen.queryByText(ele.timeSpent.toString());
+    expect(timeSpentToCheck).not.toBeNull();
+  });
 })
