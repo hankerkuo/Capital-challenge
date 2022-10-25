@@ -3,6 +3,7 @@ import type { ChangeEvent } from 'react';
 
 import AnswerRecord from 'src/components/AnswerRecord';
 import RandomUtil from 'src/utils/RandomUtil';
+import useTimer from 'src/hooks/useTimer';
 import styles from 'src/styles/CapitalMainWidget.module.css'
 
 import type { TQuestObj, TAnswerRecord } from 'src/types/TQuest';
@@ -12,41 +13,48 @@ import Countries from 'src/dataMock/Countries';
 
 const CapitalMainWidget = () => {
   const [quest, setQuest] = useState<TQuestObj>({ country: '', capital: '' });
-  const [answerMatch, setAnswerMatch] = useState<boolean>(false);
-  const [renewQuest, setRenewQuest] = useState<boolean>(true);
   // add answer record for tacking user input answer and time spent
   const [answerRecord, setAnswerRecord] = useState<TAnswerRecord>([]);
   // remaining quests
-  const [remainQuest, setRemainQuest] = useState<{ [country: string]: string }>(Countries);
-  // ref for input element
   const inputEle = useRef<HTMLInputElement>(null);
-  //TODO: add ref for tracking each anwser's spent time
+  // state for tracking each anwser's spent time (display on the screen)
+  const {timer, resetTimer, startTimer, pauseTimer} = useTimer(10);
+  // track the game start and end
+  const [gameOngoing, setGameOngoing] = useState(false);
+  // input ref to manipulate due to different game status
+  const [remainQuest, setRemainQuest] = useState<{ [country: string]: string }>(Countries);
 
   useEffect(() => {
     const randomQuestion = RandomUtil.getOneKeyValueFromObj(remainQuest);
     if (randomQuestion === null) {
-      // disable button
+      // disable button after all quests are done
       inputEle.current!.disabled = true;
+      inputEle.current!.placeholder = 'FINISHED ALL QUESTS';
+      setGameOngoing(false);
+      pauseTimer();
     } else {
       setQuest({
         country: randomQuestion.key,
         capital: randomQuestion.value
       });
     }
-  }, [renewQuest]);
+  }, [remainQuest]);
 
   const checkAnswer = (e: ChangeEvent<HTMLInputElement>) => {
-    setAnswerMatch(false);
-    if (e.target.value.toLowerCase() === quest.capital.toLowerCase()) {
-      setAnswerMatch(true);
-      setRenewQuest(!renewQuest);
-
+    // initialize the game on first typing
+    if(!gameOngoing) {
+      startTimer();
+      setGameOngoing(true);
+    }
+    const answerMatched = 
+      e.target.value.toLowerCase() === quest.capital.toLowerCase();
+    if (answerMatched) {
       // add answered record
       const newRecord = [...answerRecord];
       newRecord.push({
         country: quest.country,
         capital: quest.capital,
-        timeSpent: 0
+        timeSpent: timer
       });
       setAnswerRecord(newRecord);
 
@@ -55,8 +63,10 @@ const CapitalMainWidget = () => {
       delete remain[quest.country];
       setRemainQuest(remain);
 
-      // (document.getElementById('capitalInput') as HTMLInputElement).value = '';
+      // remove text from the input
       inputEle.current!.value = '';
+
+      resetTimer();
     }
   }
 
@@ -67,12 +77,12 @@ const CapitalMainWidget = () => {
           Capital of: {quest.country}
         </div>
         <div className={`${styles.inputLyt}`}>
-          <input className={`${styles.capitalInput} ${styles.capitalInputLyt}`} 
+          <input className={`${styles.capitalInput} ${styles.capitalInputLyt}`}
             ref={inputEle} autoComplete='off'
             placeholder='YOUR ANSWER' id='capitalInput' onChange={checkAnswer} />
         </div>
         <div className={styles.bingoNotice}>
-          {answerMatch ? `Got it!` : ''}
+          {timer}
         </div>
       </div>
       <div>
