@@ -9,6 +9,9 @@ const useTimer = (interval :number) => {
   const resetTimer = () => {
     setStartDate(new Date().getTime());
   }
+  /**
+   * RESET the timer and start
+   */
   const startTimer = () => {
     resetTimer();
     setPause(false);

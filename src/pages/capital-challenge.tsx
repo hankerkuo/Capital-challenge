@@ -3,6 +3,9 @@ import Head from 'next/head'
 import styles from 'src/styles/CapitalChallenge.module.css'
 import CapitalMainWidget from 'src/components/CapitalMainWidget'
 
+//TODO: replace by data in database
+import Countries from 'src/dataMock/Countries';
+
 const Capital: NextPage = () => {
   return (
     <div>
@@ -13,7 +16,7 @@ const Capital: NextPage = () => {
       </Head>
 
       <div>
-        <CapitalMainWidget />
+        <CapitalMainWidget countries={Countries} />
       </div>
     </div>
   )
