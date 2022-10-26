@@ -2,7 +2,7 @@ import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
-import CapitalMainWidget, { QuestTitle } from './CapitalMainWidget'
+import CapitalMainWidget, { QuestTitle } from 'src/components/CapitalMainWidget'
 import type { TQuestObj, TAnswerRecord } from 'src/types/TQuest';
 
 import Countries from 'src/dataMock/Countries';

@@ -52,13 +52,13 @@ const CapitalMainWidget = ({countries}: TCapitalMainWidgetProps) => {
   const [quest, setQuest] = useState<TQuestObj>({ country: '', capital: '' });
   // add answer record for tacking user input answer and time spent
   const [answerRecord, setAnswerRecord] = useState<TAnswerRecord>([]);
-  // remaining quests
+  // input ref to manipulate due to different game status
   const inputEle = useRef<HTMLInputElement>(null);
   // state for tracking each anwser's spent time (display on the screen)
   const { timer, resetTimer, startTimer, pauseTimer } = useTimer(10);
   // track the game start and end
   const [gameOngoing, setGameOngoing] = useState(false);
-  // input ref to manipulate due to different game status
+  // remaining quests
   const [remainQuest, setRemainQuest] = useState<{ [country: string]: string }>(countries);
 
   useEffect(() => {
