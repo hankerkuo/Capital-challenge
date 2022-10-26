@@ -20,9 +20,6 @@ test('display answer record on table properly', () => {
 
   // RENDER target
   render(<AnswerRecord answerRecord={answerRecord} />);
-
-  // debug print
-  screen.debug();
   
   // check table label is present
   const tableLabel1 = screen.queryByText(/country/i);
