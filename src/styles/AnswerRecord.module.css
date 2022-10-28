@@ -4,6 +4,9 @@
 
 .title {
   display: flex;
+  border-style: none none solid none;
+  border-color: #fff;
+  border-width: 5px;
 }
 
 .singleRow {
@@ -11,10 +14,22 @@
 }
 
 .col1Layout {
-  width: 100px
+  width: 100px;
+  margin-right: 0.5rem;
+}
+
+.col1 {
+  border-style: none solid none none;
+  border-color: #fff;
 }
 
 .col2Layout {
-  width: 100px
+  width: 100px;
+  margin-right: 0.5rem;
+}
+
+.col2 {
+  border-style: none solid none none;
+  border-color: #fff;
 }
 
