@@ -10,4 +10,9 @@ const Countries = {
   'Ukraine': 'Kyiv or Kiev'
 }
 
+const OneCountry = {
+  'Korea': 'Seoul'
+}
+
 export default Countries
+export { OneCountry }
