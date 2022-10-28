@@ -20,8 +20,8 @@ test('Quest title properly shows current quest', () => {
 test('Capital main widget start timer while input', async () => {
   const user = userEvent.setup();
   render(<CapitalMainWidget countries={Countries} />);
-  const timerEle = screen.getByTestId('timer');
-  expect(timerEle.textContent).toBe('0');
+  const timerEle = screen.getByTestId('start-btn-and-timer');
+  expect(timerEle.textContent).toBe('Start Game');
   const inputEle = screen.getByTestId('answer-input');
   // simulate user input some text and timer is expected to start
   await userEvent.type(inputEle, 'any text');
@@ -34,6 +34,9 @@ test('Show time spent in the table after answer the right answer', async () => {
     'Korea': 'Seoul'
   }
   render(<CapitalMainWidget countries={singleCountry} />);
+  // start the game
+  const startGameBtn: HTMLButtonElement = screen.getByTestId('start-btn-and-timer');
+  await userEvent.click(startGameBtn);
   const inputEle = screen.getByTestId('answer-input');
   // simulate user's typying time, delay between each character
   await userEvent.type(inputEle, 'Seoul', { delay: 50 });
@@ -50,6 +53,9 @@ test('Disable the input element after all the quests been answered', async () =>
   }
   render(<CapitalMainWidget countries={singleCountry} />);
   const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
+  expect(inputEle.disabled).toBeTruthy();
+  const startGameBtn: HTMLButtonElement = screen.getByTestId('start-btn-and-timer');
+  await userEvent.click(startGameBtn);
   expect(inputEle.disabled).toBeFalsy();
   await userEvent.type(inputEle, 'Seoul', { delay: 10 });
   expect(inputEle.disabled).toBeTruthy();

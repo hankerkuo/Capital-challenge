@@ -27,7 +27,8 @@ const AnswerInput = (
     <div className={`${styles.inputLyt}`}>
       <input className={`${styles.capitalInput} ${styles.capitalInputLyt}`}
         ref={props.inputEle} autoComplete='off'
-        placeholder='YOUR ANSWER' id='capitalInput' 
+        placeholder='WAIT FOR GAME START' id='capitalInput'
+        disabled
         onChange={props.checkAnswer} 
         data-testid='answer-input' />
     </div>
@@ -47,6 +48,7 @@ type TCapitalMainWidgetProps = {
 }
 
 //TODO: add feature for re-starting a game
+//TODO: add feature for giving hint to user time-by-time
 const CapitalMainWidget = ({countries}: TCapitalMainWidgetProps) => {
   // current quest
   const [quest, setQuest] = useState<TQuestObj>({ country: '', capital: '' });
@@ -76,6 +78,14 @@ const CapitalMainWidget = ({countries}: TCapitalMainWidgetProps) => {
       });
     }
   }, [remainQuest]);
+
+  const startNewGame = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.textContent = 'Game started';
+    setRemainQuest(countries);
+    setAnswerRecord([]);
+    inputEle.current!.disabled = false;
+    inputEle.current!.placeholder = 'TYPE YOUR ANSWER';
+  }
 
   const checkAnswer = (e: ChangeEvent<HTMLInputElement>) => {
     // initialize the game on first typing
@@ -108,13 +118,17 @@ const CapitalMainWidget = ({countries}: TCapitalMainWidgetProps) => {
   }
   // const props = {inputEle, checkAnswer};
   return (
-    <div className={styles.mainWidgetLayout}>
-      <div>
+    <div className={styles.mainWidgetLyt}>
+      <div className={styles.leftRegionLyt}>
         <QuestTitle quest={quest} />
         <AnswerInput {...{ inputEle, checkAnswer }} />
-        <Timer timer={timer} />
+        <button data-testid='start-btn-and-timer'
+          className={`${styles.newGameButtonLyt} ${styles.newGameButton}`} 
+          onClick={startNewGame}>
+          {gameOngoing? timer: 'Start Game'}
+        </button>
       </div>
-      <div>
+      <div className={`${styles.rightRegionLyt} ${styles.rightRegion}`}>
         <AnswerRecord answerRecord={answerRecord} />
       </div>
     </div>
