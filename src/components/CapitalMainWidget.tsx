@@ -1,13 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import type { ChangeEvent } from 'react';
+import { useEffect, useRef, useReducer } from 'react';
+import type { ChangeEvent, RefObject, 
+  Reducer, Dispatch, SetStateAction } from 'react';
 
 import AnswerRecord from 'src/components/AnswerRecord';
 import RandomUtil from 'src/utils/RandomUtil';
 import useTimer from 'src/hooks/useTimer';
 import styles from 'src/styles/CapitalMainWidget.module.css'
-
 import type { TQuestObj, TAnswerRecord } from 'src/types/TQuest';
-import type { RefObject } from 'react';
 
 const QuestTitle = ({ quest }: { quest: TQuestObj }) => {
   return (
@@ -29,13 +28,13 @@ const AnswerInput = (
         ref={props.inputEle} autoComplete='off'
         placeholder='WAIT FOR GAME START' id='capitalInput'
         disabled
-        onChange={props.checkAnswer} 
+        onChange={props.checkAnswer}
         data-testid='answer-input' />
     </div>
   )
 }
 
-const Timer = ({timer}: {timer: number}) => {
+const Timer = ({ timer }: { timer: number }) => {
   return (
     <div className={styles.bingoNotice} data-testid='timer'>
       {timer}
@@ -47,93 +46,145 @@ type TCapitalMainWidgetProps = {
   countries: { [country: string]: string };
 }
 
-//TODO: add feature for re-starting a game
-//TODO: add feature for giving hint to user time-by-time
-const CapitalMainWidget = ({countries}: TCapitalMainWidgetProps) => {
+type TQuestState = {
   // current quest
-  const [quest, setQuest] = useState<TQuestObj>({ country: '', capital: '' });
-  // add answer record for tacking user input answer and time spent
-  const [answerRecord, setAnswerRecord] = useState<TAnswerRecord>([]);
+  quest: TQuestObj;
+  // answer record for tracking user input answer and time spent
+  answerRecord: TAnswerRecord;
+  // track the game start and end
+  gameOngoing: boolean;
+  // for extracting next quest
+  remainQuest: { [country: string]: string };
+}
+
+enum QuestActionType {
+  START,
+  ANSWER_MATCHED,
+  QUEST_END,
+  NEXT_QUEST,
+  TYPE_TO_START,
+}
+
+type TQuestAction = {
+  type: QuestActionType;
+  countries: { [country: string]: string };
+  inputEle: RefObject<HTMLInputElement>;
+  timer: number;
+  startTimer: () => void;
+  resetTimer: () => void;
+  setPause: Dispatch<SetStateAction<boolean>>;
+}
+
+const reducer: Reducer<TQuestState, TQuestAction> = (state, action) => {
+  switch (action.type) {
+    case QuestActionType.START:
+      action.inputEle.current!.disabled = false;
+      action.inputEle.current!.placeholder = 'TYPE YOUR ANSWER';
+      return { ...state, remainQuest: action.countries, answerRecord: [] };
+    case QuestActionType.ANSWER_MATCHED:
+      // add answered record
+      const newRecord = [...state.answerRecord];
+      newRecord.push({
+        country: state.quest.country,
+        capital: state.quest.capital,
+        timeSpent: action.timer
+      });
+      // remove the answered one from the remain task
+      const newRemain = { ...state.remainQuest };
+      delete newRemain[state.quest.country];
+      // remove text from the input
+      action.inputEle.current!.value = '';
+      action.resetTimer();
+      return { ...state, answerRecord: newRecord, remainQuest: newRemain };
+    case QuestActionType.QUEST_END:
+      // disable button after all quests are done
+      action.inputEle.current!.disabled = true;
+      action.inputEle.current!.placeholder = 'FINISHED ALL QUESTS';
+      action.setPause(true);
+      return { ...state, gameOngoing: false };
+    case QuestActionType.NEXT_QUEST:
+      const randomQuestion = RandomUtil.getOneKeyValueFromObj(state.remainQuest);
+      return {
+        ...state, quest: {
+          country: randomQuestion!.key,
+          capital: randomQuestion!.value
+        }
+      };
+    case QuestActionType.TYPE_TO_START:
+      action.startTimer();
+      return { ...state, gameOngoing: true };
+    // default return is important for Reducer type checking,
+    // or switch case has chance to return 'undefined'
+    default:
+      throw new Error();
+  }
+}
+
+//TODO: add feature for giving hint to user time-by-time
+const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
   // input ref to manipulate due to different game status
   const inputEle = useRef<HTMLInputElement>(null);
   // state for tracking each anwser's spent time (display on the screen)
-  const { timer, resetTimer, startTimer, pauseTimer } = useTimer(10);
-  // track the game start and end
-  const [gameOngoing, setGameOngoing] = useState(false);
-  // remaining quests
-  const [remainQuest, setRemainQuest] = useState<{ [country: string]: string }>(countries);
+  const { timer, startTimer, resetTimer, setPause } = useTimer(10);
+  // main state for maintaining quest feature
+  const [questState, gameUpdate] = useReducer(reducer, {
+    quest: { country: '', capital: '' },
+    answerRecord: [],
+    gameOngoing: false,
+    remainQuest: countries
+  });
+
+  const actions = {
+    countries,
+    inputEle,
+    timer,
+    startTimer,
+    resetTimer,
+    setPause
+  }
 
   useEffect(() => {
-    const randomQuestion = RandomUtil.getOneKeyValueFromObj(remainQuest);
-    if (randomQuestion === null) {
-      // disable button after all quests are done
-      inputEle.current!.disabled = true;
-      inputEle.current!.placeholder = 'FINISHED ALL QUESTS';
-      setGameOngoing(false);
-      pauseTimer();
+    if (Object.keys(questState.remainQuest).length > 0) {
+      gameUpdate({ type: QuestActionType.NEXT_QUEST, ...actions });
     } else {
-      setQuest({
-        country: randomQuestion.key,
-        capital: randomQuestion.value
-      });
+      gameUpdate({ type: QuestActionType.QUEST_END, ...actions });
     }
-  }, [remainQuest]);
+  }, [questState.remainQuest]);
 
   const startNewGame = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.textContent = 'Game started';
-    setRemainQuest(countries);
-    setAnswerRecord([]);
-    inputEle.current!.disabled = false;
-    inputEle.current!.placeholder = 'TYPE YOUR ANSWER';
+    gameUpdate({ type: QuestActionType.START, ...actions });
   }
 
   const checkAnswer = (e: ChangeEvent<HTMLInputElement>) => {
     // initialize the game on first typing
-    if (!gameOngoing) {
-      startTimer();
-      setGameOngoing(true);
+    if (!questState.gameOngoing) {
+      gameUpdate({ type: QuestActionType.TYPE_TO_START, ...actions });
     }
     const answerMatched =
-      e.target.value.toLowerCase() === quest.capital.toLowerCase();
+      e.target.value.toLowerCase() === questState.quest.capital.toLowerCase();
     if (answerMatched) {
-      // add answered record
-      const newRecord = [...answerRecord];
-      newRecord.push({
-        country: quest.country,
-        capital: quest.capital,
-        timeSpent: timer
-      });
-      setAnswerRecord(newRecord);
-
-      // remove the answered one from the remain task
-      const remain = { ...remainQuest };
-      delete remain[quest.country];
-      setRemainQuest(remain);
-
-      // remove text from the input
-      inputEle.current!.value = '';
-
-      resetTimer();
+      gameUpdate({ type: QuestActionType.ANSWER_MATCHED, ...actions });
     }
   }
-  // const props = {inputEle, checkAnswer};
+
   return (
     <div className={styles.mainWidgetLyt}>
       <div className={styles.leftRegionLyt}>
-        <QuestTitle quest={quest} />
+        <QuestTitle quest={questState.quest} />
         <AnswerInput {...{ inputEle, checkAnswer }} />
         <button data-testid='start-btn-and-timer'
-          className={`${styles.newGameButtonLyt} ${styles.newGameButton}`} 
+          className={`${styles.newGameButtonLyt} ${styles.newGameButton}`}
           onClick={startNewGame}>
-          {gameOngoing? timer: 'Start Game'}
+          {questState.gameOngoing ? timer : 'Start Game'}
         </button>
       </div>
       <div className={`${styles.rightRegionLyt} ${styles.rightRegion}`}>
-        <AnswerRecord answerRecord={answerRecord} />
+        <AnswerRecord answerRecord={questState.answerRecord} />
       </div>
     </div>
   )
 }
 
 export default CapitalMainWidget
-export { QuestTitle, AnswerInput, Timer}
+export { QuestTitle, AnswerInput, Timer }

@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import styles from 'src/styles/CapitalChallenge.module.css'
 import CapitalMainWidget from 'src/components/CapitalMainWidget'
 
 //TODO: replace by data in database
