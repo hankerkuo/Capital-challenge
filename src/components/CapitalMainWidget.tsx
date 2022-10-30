@@ -1,12 +1,13 @@
 import { useEffect, useRef, useReducer } from 'react';
-import type { ChangeEvent, RefObject, 
-  Reducer, Dispatch, SetStateAction } from 'react';
+import type { ChangeEvent, RefObject } from 'react';
 
 import AnswerRecord from 'src/components/AnswerRecord';
-import RandomUtil from 'src/utils/RandomUtil';
 import useTimer from 'src/hooks/useTimer';
+import QuestStateReducer from 'src/reducer/QuestStateReducer';
+import { QuestActionType } from 'src/reducer/QuestStateReducer';
+import type { TQuestObj } from 'src/types/TQuest';
+
 import styles from 'src/styles/CapitalMainWidget.module.css'
-import type { TQuestObj, TAnswerRecord } from 'src/types/TQuest';
 
 const QuestTitle = ({ quest }: { quest: TQuestObj }) => {
   return (
@@ -46,80 +47,6 @@ type TCapitalMainWidgetProps = {
   countries: { [country: string]: string };
 }
 
-type TQuestState = {
-  // current quest
-  quest: TQuestObj;
-  // answer record for tracking user input answer and time spent
-  answerRecord: TAnswerRecord;
-  // track the game start and end
-  gameOngoing: boolean;
-  // for extracting next quest
-  remainQuest: { [country: string]: string };
-}
-
-enum QuestActionType {
-  START,
-  ANSWER_MATCHED,
-  QUEST_END,
-  NEXT_QUEST,
-  TYPE_TO_START,
-}
-
-type TQuestAction = {
-  type: QuestActionType;
-  countries: { [country: string]: string };
-  inputEle: RefObject<HTMLInputElement>;
-  timer: number;
-  startTimer: () => void;
-  resetTimer: () => void;
-  setPause: Dispatch<SetStateAction<boolean>>;
-}
-
-const reducer: Reducer<TQuestState, TQuestAction> = (state, action) => {
-  switch (action.type) {
-    case QuestActionType.START:
-      action.inputEle.current!.disabled = false;
-      action.inputEle.current!.placeholder = 'TYPE YOUR ANSWER';
-      return { ...state, remainQuest: action.countries, answerRecord: [] };
-    case QuestActionType.ANSWER_MATCHED:
-      // add answered record
-      const newRecord = [...state.answerRecord];
-      newRecord.push({
-        country: state.quest.country,
-        capital: state.quest.capital,
-        timeSpent: action.timer
-      });
-      // remove the answered one from the remain task
-      const newRemain = { ...state.remainQuest };
-      delete newRemain[state.quest.country];
-      // remove text from the input
-      action.inputEle.current!.value = '';
-      action.resetTimer();
-      return { ...state, answerRecord: newRecord, remainQuest: newRemain };
-    case QuestActionType.QUEST_END:
-      // disable button after all quests are done
-      action.inputEle.current!.disabled = true;
-      action.inputEle.current!.placeholder = 'FINISHED ALL QUESTS';
-      action.setPause(true);
-      return { ...state, gameOngoing: false };
-    case QuestActionType.NEXT_QUEST:
-      const randomQuestion = RandomUtil.getOneKeyValueFromObj(state.remainQuest);
-      return {
-        ...state, quest: {
-          country: randomQuestion!.key,
-          capital: randomQuestion!.value
-        }
-      };
-    case QuestActionType.TYPE_TO_START:
-      action.startTimer();
-      return { ...state, gameOngoing: true };
-    // default return is important for Reducer type checking,
-    // or switch case has chance to return 'undefined'
-    default:
-      throw new Error();
-  }
-}
-
 //TODO: add feature for giving hint to user time-by-time
 const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
   // input ref to manipulate due to different game status
@@ -127,7 +54,7 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
   // state for tracking each anwser's spent time (display on the screen)
   const { timer, startTimer, resetTimer, setPause } = useTimer(10);
   // main state for maintaining quest feature
-  const [questState, gameUpdate] = useReducer(reducer, {
+  const [questState, gameUpdate] = useReducer(QuestStateReducer, {
     quest: { country: '', capital: '' },
     answerRecord: [],
     gameOngoing: false,
