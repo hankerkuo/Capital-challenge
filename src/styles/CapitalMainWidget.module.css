@@ -16,12 +16,30 @@
 
 .countryTitleLyt {
   padding-bottom: 1rem;
+  display: flex;
 }
 
 .countryTitle {
   font-family: 'Lato', sans-serif;
   color: #53A8F1;
   font-size: 1.5rem;
+}
+
+@keyframes rollout {
+  0% { transform: translateY(-100px); }
+  100% { transform: none; }
+}
+
+.hintChar{
+  animation: rollout 0.4s;
+}
+
+.hintCharLyt {
+  margin: 0;
+}
+
+.titlePLyt{
+  margin-right: 0.5rem;
 }
 
 .inputLyt {

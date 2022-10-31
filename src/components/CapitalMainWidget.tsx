@@ -1,4 +1,4 @@
-import { useEffect, useRef, useReducer } from 'react';
+import { useEffect, useRef, useReducer, useState } from 'react';
 import type { ChangeEvent, RefObject } from 'react';
 
 import AnswerRecord from 'src/components/AnswerRecord';
@@ -9,10 +9,47 @@ import type { TQuestObj } from 'src/types/TQuest';
 
 import styles from 'src/styles/CapitalMainWidget.module.css'
 
-const QuestTitle = ({ quest }: { quest: TQuestObj }) => {
+const HintChar = ({ capital, idx }: { capital: string, idx: number }) => {
+  if (capital[idx] === ' ') {
+    return (
+      <>&nbsp;</>
+    )
+  } else {
+    return (
+      <p className={`${styles.hintChar} ${styles.hintCharLyt}`}>
+        {capital[idx]}
+      </p>
+    )
+  }
+}
+
+const QuestTitle = ({ quest, timer }: { quest: TQuestObj, timer: number }) => {
+  // hint provide to gamer
+  const [hintIdx, setHintIdx] = useState<number>(0);
+  // time passed
+  const [timePassed, setTimePassed] = useState(4000);
+
+  if (hintIdx !== 0 && timer < 3000) {
+    setHintIdx(0);
+    setTimePassed(4000);
+  }
+  if (hintIdx === 0 && timer > 3000) {
+    setHintIdx(1);
+  }
+  if (hintIdx !== 0 && (timer > timePassed)) {
+    console.log('rendered');
+    setHintIdx(prev => prev + 1);
+    setTimePassed(prev => prev + 2000);
+  }
   return (
-    <div className={`${styles.countryTitle} ${styles.countryTitleLyt}`}>
-      Capital of: {quest.country}
+    <div key={quest.country} className={`${styles.countryTitle} ${styles.countryTitleLyt}`}>
+      {/* {quest.country}:{quest.capital.slice(0, hintIdx)} */}
+      <p className={`${styles.hintChar} ${styles.hintCharLyt} ${styles.titlePLyt}`}>
+        {`${quest.country}:`}
+      </p> 
+      {[...Array(hintIdx)].map((x, i) =>
+        <HintChar capital={quest.capital} idx={i} key={`${quest.capital}${i}`}/>
+      )}
     </div>
   )
 }
@@ -98,7 +135,7 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
   return (
     <div className={styles.mainWidgetLyt}>
       <div className={styles.leftRegionLyt}>
-        <QuestTitle quest={questState.quest} />
+        <QuestTitle quest={questState.quest} timer={timer} />
         <AnswerInput {...{ inputEle, checkAnswer }} />
         <button data-testid='start-btn-and-timer'
           className={`${styles.newGameButtonLyt} ${styles.newGameButton}`}
