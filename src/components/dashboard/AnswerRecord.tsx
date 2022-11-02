@@ -1,6 +1,6 @@
 import type { TAnswerRecord } from 'src/types/TQuest';
 
-import styles from 'src/styles/AnswerRecord.module.css'
+import styles from 'src/styles/components/AnswerRecord.module.css'
 
 const AnswerRecord = ({ answerRecord }: { answerRecord: TAnswerRecord }) => {
   return (

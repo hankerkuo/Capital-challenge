@@ -1,90 +1,21 @@
-import { useEffect, useRef, useReducer, useState } from 'react';
-import type { ChangeEvent, RefObject } from 'react';
+import { useEffect, useRef, useReducer } from 'react';
+import type { ChangeEvent } from 'react';
 
-import AnswerRecord from 'src/components/AnswerRecord';
+import QuestAndHint from 'src/components/answerForm/QuestAndHint';
+import AnswerInput from 'src/components/answerForm/AnswerInput';
+import StartButton from 'src/components/answerForm/StartButton';
+import AnswerRecord from 'src/components/dashboard/AnswerRecord';
+
 import useTimer from 'src/hooks/useTimer';
 import QuestStateReducer from 'src/reducer/QuestStateReducer';
 import { QuestActionType } from 'src/reducer/QuestStateReducer';
-import type { TQuestObj } from 'src/types/TQuest';
 
-import styles from 'src/styles/CapitalMainWidget.module.css'
-
-const HintChar = ({ capital, idx }: { capital: string, idx: number }) => {
-  if (capital[idx] === ' ') {
-    return (
-      <>&nbsp;</>
-    )
-  } else {
-    return (
-      <p className={`${styles.hintChar} ${styles.hintCharLyt}`}>
-        {capital[idx]}
-      </p>
-    )
-  }
-}
-
-const QuestTitle = ({ quest, timer }: { quest: TQuestObj, timer: number }) => {
-  // hint provide to gamer
-  const [hintIdx, setHintIdx] = useState<number>(0);
-  // time passed
-  const [timePassed, setTimePassed] = useState(4000);
-
-  if (hintIdx !== 0 && timer < 3000) {
-    setHintIdx(0);
-    setTimePassed(4000);
-  }
-  if (hintIdx === 0 && timer > 3000) {
-    setHintIdx(1);
-  }
-  if (hintIdx !== 0 && (timer > timePassed)) {
-    console.log('rendered');
-    setHintIdx(prev => prev + 1);
-    setTimePassed(prev => prev + 2000);
-  }
-  return (
-    <div key={quest.country} className={`${styles.countryTitle} ${styles.countryTitleLyt}`}>
-      {/* {quest.country}:{quest.capital.slice(0, hintIdx)} */}
-      <p className={`${styles.hintChar} ${styles.hintCharLyt} ${styles.titlePLyt}`}>
-        {`${quest.country}:`}
-      </p> 
-      {[...Array(hintIdx)].map((x, i) =>
-        <HintChar capital={quest.capital} idx={i} key={`${quest.capital}${i}`}/>
-      )}
-    </div>
-  )
-}
-
-const AnswerInput = (
-  props:
-    {
-      inputEle: RefObject<HTMLInputElement>,
-      checkAnswer: (e: ChangeEvent<HTMLInputElement>) => void
-    }) => {
-  return (
-    <div className={`${styles.inputLyt}`}>
-      <input className={`${styles.capitalInput} ${styles.capitalInputLyt}`}
-        ref={props.inputEle} autoComplete='off'
-        placeholder='WAIT FOR GAME START' id='capitalInput'
-        disabled
-        onChange={props.checkAnswer}
-        data-testid='answer-input' />
-    </div>
-  )
-}
-
-const Timer = ({ timer }: { timer: number }) => {
-  return (
-    <div className={styles.bingoNotice} data-testid='timer'>
-      {timer}
-    </div>
-  )
-}
+import styles from 'src/styles/components/CapitalMainWidget.module.css'
 
 type TCapitalMainWidgetProps = {
   countries: { [country: string]: string };
 }
 
-//TODO: add feature for giving hint to user time-by-time
 const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
   // input ref to manipulate due to different game status
   const inputEle = useRef<HTMLInputElement>(null);
@@ -135,13 +66,9 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
   return (
     <div className={styles.mainWidgetLyt}>
       <div className={styles.leftRegionLyt}>
-        <QuestTitle quest={questState.quest} timer={timer} />
+        <QuestAndHint quest={questState.quest} timer={timer} />
         <AnswerInput {...{ inputEle, checkAnswer }} />
-        <button data-testid='start-btn-and-timer'
-          className={`${styles.newGameButtonLyt} ${styles.newGameButton}`}
-          onClick={startNewGame}>
-          {questState.gameOngoing ? timer : 'Start Game'}
-        </button>
+        <StartButton {...{ questState, startNewGame, timer }} />
       </div>
       <div className={`${styles.rightRegionLyt} ${styles.rightRegion}`}>
         <AnswerRecord answerRecord={questState.answerRecord} />
@@ -151,4 +78,3 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
 }
 
 export default CapitalMainWidget
-export { QuestTitle, AnswerInput, Timer }

@@ -2,20 +2,9 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
-import CapitalMainWidget, { QuestTitle } from 'src/components/CapitalMainWidget'
-import type { TQuestObj } from 'src/types/TQuest';
+import CapitalMainWidget from './CapitalMainWidget'
 
 import Countries from 'src/dataMock/Countries';
-
-test('Quest title properly shows current quest', () => {
-  const quest: TQuestObj = {
-    country: 'Taiwan',
-    capital: 'Taipei'
-  }
-  render(<QuestTitle quest={quest} />);
-  expect(() => screen.getByText(/capital of: taiwan/i)).not.toThrowError();
-  expect(() => screen.getByText(/capital of: japan/i)).toThrowError();
-});
 
 test('Capital main widget start timer while input', async () => {
   const user = userEvent.setup();

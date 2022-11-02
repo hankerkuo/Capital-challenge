@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+.mainWidgetLyt {
+  /* Center horizontally*/
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  width: 650px;
+  margin-top: 1rem;
+}
+
+.leftRegionLyt {
+  width: 250px;
+  margin-right: 1rem;
+}
+
+.rightRegionLyt {
+  margin: 0 5%;
+}
+
+@media (max-width: 768px) {
+  .mainWidgetLyt {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 320px) {
+  .leftRegionLyt {
+    width: 80%;
+    margin-right: 0;
+  }
+}

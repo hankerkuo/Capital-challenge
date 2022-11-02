@@ -1,7 +1,7 @@
 import {render, screen} from '@testing-library/react'
 import '@testing-library/jest-dom'
 
-import AnswerRecord from 'src/components/AnswerRecord'
+import AnswerRecord from './AnswerRecord'
 
 test('display answer record on table properly', () => {
 
