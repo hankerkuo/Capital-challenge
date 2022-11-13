@@ -21,7 +21,8 @@ const HintChar = ({ capital, idx }: { capital: string, idx: number }) => {
 
 // TODO: add more flexbility to the function for different interval
 // possible for user to choose lower interval and maybe typing challenge mode?
-const QuestAndHint = ({ quest, timer }: { quest: TQuestObj, timer: number }) => {
+const QuestAndHint = ({ quest, timer, showBlur }: 
+    { quest: TQuestObj, timer: number, showBlur: boolean }) => {
   // hint provide to gamer
   const [hintIdx, setHintIdx] = useState<number>(0);
 
@@ -50,9 +51,14 @@ const QuestAndHint = ({ quest, timer }: { quest: TQuestObj, timer: number }) => 
 
   return (
     <div key={quest.country} className={`${styles.countryTitle} ${styles.countryTitleLyt}`}>
-      <p className={`${styles.hintChar} ${styles.hintCharLyt} ${styles.titlePLyt}`}>
-        {`${quest.country}:`}
-      </p>
+      {showBlur ?
+        <p className={`${styles.hintCharBlur} ${styles.hintCharLyt} ${styles.titlePLyt}`}>
+          Quest placeholder
+        </p> :
+        <p className={`${styles.hintChar} ${styles.hintCharLyt} ${styles.titlePLyt}`}>
+          {`${quest.country}:`}
+        </p>
+      }
       {[...Array(hintIdx)].map((x, i) =>
         // key here: e.g., ['kyiv', 'kiev'] will become 'kyiv,kiev'
         <HintChar capital={aggregatedCapital} idx={i} key={`${quest.capital}${i}`} />

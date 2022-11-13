@@ -3,6 +3,12 @@
   100% { transform: none; }
 }
 
+@keyframes blur {
+	0%		{text-shadow:  0 0 10px #53A8F1;}
+	50%	{text-shadow:  0 0 20px #53A8F1;}
+  100%		{text-shadow:  0 0 10px #53A8F1;}
+}
+
 .countryTitleLyt {
   padding-bottom: 1rem;
   display: flex;
@@ -18,6 +24,12 @@
   animation: rollout 0.4s;
 }
 
+.hintCharBlur{
+  color: transparent;
+	animation: blur 2s linear infinite;
+	-webkit-animation: blur 2s linear infinite;
+}
+
 .hintCharLyt {
   margin: 0;
 }
@@ -25,3 +37,4 @@
 .titlePLyt{
   margin-right: 0.5rem;
 }
+
