@@ -7,7 +7,7 @@ class RandomUtil {
     return array[randomIdx];
   }
   static getOneKeyValueFromObj = 
-    (target: { [key: string]: string }): { key: string; value: string } | null=> {
+    <T>(target: { [key: string]: T }): { key: string; value: T } | null=> {
     const randomKey = RandomUtil.getOneFromArray(Object.keys(target));
     return randomKey ? {
       key: randomKey,
