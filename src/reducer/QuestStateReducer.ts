@@ -15,7 +15,7 @@ export type TQuestState = {
   remainQuest: { [country: string]: string[] };
 }
 
-export enum QuestActionType {
+export enum QuestActionEnum {
   START,
   ANSWER_MATCHED,
   QUEST_END,
@@ -24,7 +24,7 @@ export enum QuestActionType {
 }
 
 export type TQuestAction = {
-  type: QuestActionType;
+  type: QuestActionEnum;
   countries: { [country: string]: string[] };
   inputEle: RefObject<HTMLInputElement>;
   timer: number;
@@ -35,11 +35,15 @@ export type TQuestAction = {
 
 const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) => {
   switch (action.type) {
-    case QuestActionType.START:
+    case QuestActionEnum.START:
       action.inputEle.current!.disabled = false;
       action.inputEle.current!.placeholder = 'TYPE YOUR ANSWER';
-      return { ...state, remainQuest: action.countries, answerRecord: [] };
-    case QuestActionType.ANSWER_MATCHED:
+      const randomStartQuest = RandomUtil.getOneKeyValueFromObj(action.countries);
+      return { ...state, remainQuest: action.countries, answerRecord: [], quest: {
+        country: randomStartQuest!.key,
+        capital: randomStartQuest!.value
+      } };
+    case QuestActionEnum.ANSWER_MATCHED:
       // add answered record
       const newRecord = [...state.answerRecord];
       newRecord.push({
@@ -54,13 +58,13 @@ const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) =>
       action.inputEle.current!.value = '';
       action.resetTimer();
       return { ...state, answerRecord: newRecord, remainQuest: newRemain };
-    case QuestActionType.QUEST_END:
+    case QuestActionEnum.QUEST_END:
       // disable button after all quests are done
       action.inputEle.current!.disabled = true;
       action.inputEle.current!.placeholder = 'FINISHED ALL QUESTS';
       action.setPause(true);
       return { ...state, gameOngoing: false };
-    case QuestActionType.NEXT_QUEST:
+    case QuestActionEnum.NEXT_QUEST:
       const randomQuestion = RandomUtil.getOneKeyValueFromObj(state.remainQuest);
       return {
         ...state, quest: {
@@ -68,7 +72,7 @@ const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) =>
           capital: randomQuestion!.value
         }
       };
-    case QuestActionType.TYPE_TO_START:
+    case QuestActionEnum.TYPE_TO_START:
       action.startTimer();
       return { ...state, gameOngoing: true };
     default:
