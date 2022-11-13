@@ -6,7 +6,7 @@ import type { TQuestObj } from 'src/types/TQuest';
 test('Quest title properly shows current quest', () => {
   const quest: TQuestObj = {
     country: 'Taiwan',
-    capital: 'Taipei'
+    capital: ['Taipei']
   }
   render(<QuestAndHint quest={quest} timer={0} />);
   expect(() => screen.getByText(/Taiwan:/i)).not.toThrowError();

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 import GameConfig from 'src/const/GameConfig';
 import type { TQuestObj } from 'src/types/TQuest';
@@ -32,13 +32,30 @@ const QuestAndHint = ({ quest, timer }: { quest: TQuestObj, timer: number }) => 
     console.log('Give next hint');
     setHintIdx(prev => prev + 1);
   }
+
+  const calculateAggregatedCapital = (capital: string[]) => {
+    const aggregatedCapital = capital.reduce((prev, cur, curIdx) => {
+      let result: string = prev;
+      if (curIdx !== 0) {
+        result += ' or ';
+      }
+      result += cur;
+      return result;
+    }, '');
+    return aggregatedCapital;
+  }
+
+  const aggregatedCapital = useMemo<string>(
+    () => calculateAggregatedCapital(quest.capital), [quest.capital]);
+
   return (
     <div key={quest.country} className={`${styles.countryTitle} ${styles.countryTitleLyt}`}>
       <p className={`${styles.hintChar} ${styles.hintCharLyt} ${styles.titlePLyt}`}>
         {`${quest.country}:`}
-      </p> 
+      </p>
       {[...Array(hintIdx)].map((x, i) =>
-        <HintChar capital={quest.capital} idx={i} key={`${quest.capital}${i}`}/>
+        // key here: e.g., ['kyiv', 'kiev'] will become 'kyiv,kiev'
+        <HintChar capital={aggregatedCapital} idx={i} key={`${quest.capital}${i}`} />
       )}
     </div>
   )
