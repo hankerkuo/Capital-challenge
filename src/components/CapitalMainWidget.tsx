@@ -1,10 +1,11 @@
-import { useEffect, useRef, useReducer } from 'react';
+import { useEffect, useRef, useReducer, useState } from 'react';
 import type { ChangeEvent } from 'react';
 
 import QuestAndHint from 'src/components/answerForm/QuestAndHint';
 import AnswerInput from 'src/components/answerForm/AnswerInput';
 import StartButton from 'src/components/answerForm/StartButton';
 import AnswerRecord from 'src/components/dashboard/AnswerRecord';
+import PopupNotification from './notification/PopupNotification';
 
 import useTimer from 'src/hooks/useTimer';
 import QuestStateReducer from 'src/reducer/QuestStateReducer';
@@ -21,6 +22,8 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
   const inputEle = useRef<HTMLInputElement>(null);
   // state for tracking each anwser's spent time (display on the screen)
   const { timer, startTimer, resetTimer, setPause } = useTimer(10);
+  // show game ends notification
+  const [notifyGameEnd, setNotifyGameEnd] = useState<boolean>(true);
   // main state for maintaining quest feature
   const [questState, gameUpdate] = useReducer(QuestStateReducer, {
     quest: { country: '', capital: [''] },
@@ -43,6 +46,7 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
       gameUpdate({ type: QuestActionType.NEXT_QUEST, ...actions });
     } else {
       gameUpdate({ type: QuestActionType.QUEST_END, ...actions });
+      setNotifyGameEnd((prev) => !prev);
     }
   }, [questState.remainQuest]);
 
@@ -76,6 +80,9 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
       </div>
       <div className={`${styles.rightRegionLyt} ${styles.rightRegion}`}>
         <AnswerRecord answerRecord={questState.answerRecord} />
+      </div>
+      <div>
+        <PopupNotification renewSignal={notifyGameEnd} text={'Game Completed and recorded!'}/>
       </div>
     </div>
   )
