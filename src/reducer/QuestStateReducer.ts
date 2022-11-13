@@ -12,7 +12,7 @@ export type TQuestState = {
   // track the game start and end
   gameOngoing: boolean;
   // for extracting next quest
-  remainQuest: { [country: string]: string };
+  remainQuest: { [country: string]: string[] };
 }
 
 export enum QuestActionType {
@@ -25,7 +25,7 @@ export enum QuestActionType {
 
 export type TQuestAction = {
   type: QuestActionType;
-  countries: { [country: string]: string };
+  countries: { [country: string]: string[] };
   inputEle: RefObject<HTMLInputElement>;
   timer: number;
   startTimer: () => void;

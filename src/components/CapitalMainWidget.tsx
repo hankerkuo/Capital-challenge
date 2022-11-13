@@ -13,7 +13,7 @@ import { QuestActionType } from 'src/reducer/QuestStateReducer';
 import styles from 'src/styles/components/CapitalMainWidget.module.css'
 
 type TCapitalMainWidgetProps = {
-  countries: { [country: string]: string };
+  countries: { [country: string]: string[] };
 }
 
 const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
@@ -23,7 +23,7 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
   const { timer, startTimer, resetTimer, setPause } = useTimer(10);
   // main state for maintaining quest feature
   const [questState, gameUpdate] = useReducer(QuestStateReducer, {
-    quest: { country: '', capital: '' },
+    quest: { country: '', capital: [''] },
     answerRecord: [],
     gameOngoing: false,
     remainQuest: countries
@@ -56,8 +56,12 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
     if (!questState.gameOngoing) {
       gameUpdate({ type: QuestActionType.TYPE_TO_START, ...actions });
     }
-    const answerMatched =
-      e.target.value.toLowerCase() === questState.quest.capital.toLowerCase();
+    let answerMatched = false;
+    questState.quest.capital.forEach(capitalName => {
+      if (e.target.value.toLowerCase() === capitalName.toLowerCase()) {
+        answerMatched = true;
+      }
+    });
     if (answerMatched) {
       gameUpdate({ type: QuestActionType.ANSWER_MATCHED, ...actions });
     }

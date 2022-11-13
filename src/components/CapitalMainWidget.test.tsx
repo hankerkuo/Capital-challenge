@@ -20,7 +20,7 @@ test('Capital main widget start timer while input', async () => {
 test('Show time spent in the table after answer the right answer', async () => {
   const user = userEvent.setup();
   const singleCountry = {
-    'Korea': 'Seoul'
+    'Korea': ['Seoul']
   }
   render(<CapitalMainWidget countries={singleCountry} />);
   // start the game
@@ -38,7 +38,7 @@ test('Show time spent in the table after answer the right answer', async () => {
 test('Disable the input element after all the quests been answered', async () => {
   const user = userEvent.setup();
   const singleCountry = {
-    'Korea': 'Seoul'
+    'Korea': ['Seoul']
   }
   render(<CapitalMainWidget countries={singleCountry} />);
   const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
