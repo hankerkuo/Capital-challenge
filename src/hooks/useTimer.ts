@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 const useTimer = (interval :number) => {
   const [startDate, setStartDate] = useState(new Date().getTime());
@@ -24,7 +24,7 @@ const useTimer = (interval :number) => {
   
       return () => clearInterval(timerInterval);
     }
-  }, [startDate, pause]);
+  }, [startDate, pause, interval]);
 
   return {timer, resetTimer, startTimer, setPause };
 };
