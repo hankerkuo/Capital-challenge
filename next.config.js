@@ -6,6 +6,15 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   basePath: "",
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/capital-challenge',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
