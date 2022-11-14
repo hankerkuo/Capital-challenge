@@ -71,7 +71,7 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
   }
 
   return (
-    <div className={styles.mainWidgetLyt}>
+    <div className={`${styles.mainWidgetLyt} ${styles.mainWidget}`}>
       <div className={styles.leftRegionLyt}>
         <QuestAndHint quest={questState.quest} 
           timer={timer} showBlur={Object.keys(questState.remainQuest).length === 0}/>
