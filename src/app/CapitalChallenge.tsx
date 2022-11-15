@@ -3,7 +3,6 @@
 import Head from 'next/head'
 import CapitalMainWidget from 'src/components/CapitalMainWidget'
 
-//TODO: replace by data in database
 import Countries from 'src/dataMock/Countries';
 import { OneCountry } from 'src/dataMock/Countries';
 
