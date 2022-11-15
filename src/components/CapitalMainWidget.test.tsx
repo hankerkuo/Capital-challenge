@@ -6,15 +6,25 @@ import CapitalMainWidget from './CapitalMainWidget'
 
 import Countries from 'src/dataMock/Countries';
 
+test('Input is only enabled after pressing start button', async() => {
+  const user = userEvent.setup();
+  render(<CapitalMainWidget countries={Countries} />);
+  const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
+  const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
+  expect(inputEle.disabled).toBeTruthy();
+  await user.click(startBtnEle);
+  expect(inputEle.disabled).toBeFalsy();
+});
+
 test('Capital main widget start timer while input', async () => {
   const user = userEvent.setup();
   render(<CapitalMainWidget countries={Countries} />);
-  const timerEle = screen.getByTestId('start-btn-and-timer');
-  expect(timerEle.textContent).toBe('Start Game');
+  const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
+  expect(startBtnEle.textContent).toBe('Start Game');
   const inputEle = screen.getByTestId('answer-input');
   // simulate user input some text and timer is expected to start
-  await userEvent.type(inputEle, 'any text');
-  expect(timerEle.textContent).not.toBe('0');
+  await user.type(inputEle, 'any text');
+  expect(startBtnEle.textContent).not.toBe('0');
 });
 
 test('Show time spent in the table after answer the right answer', async () => {
@@ -24,8 +34,8 @@ test('Show time spent in the table after answer the right answer', async () => {
   }
   render(<CapitalMainWidget countries={singleCountry} />);
   // start the game
-  const startGameBtn: HTMLButtonElement = screen.getByTestId('start-btn-and-timer');
-  await userEvent.click(startGameBtn);
+  const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
+  await user.click(startBtnEle);
   const inputEle = screen.getByTestId('answer-input');
   // simulate user's typying time, delay between each character
   await userEvent.type(inputEle, 'Seoul', { delay: 50 });
@@ -42,10 +52,8 @@ test('Disable the input element after all the quests been answered', async () =>
   }
   render(<CapitalMainWidget countries={singleCountry} />);
   const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
-  expect(inputEle.disabled).toBeTruthy();
-  const startGameBtn: HTMLButtonElement = screen.getByTestId('start-btn-and-timer');
-  await userEvent.click(startGameBtn);
-  expect(inputEle.disabled).toBeFalsy();
+  const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
+  await user.click(startBtnEle);
   await userEvent.type(inputEle, 'Seoul', { delay: 10 });
   expect(inputEle.disabled).toBeTruthy();
 });
