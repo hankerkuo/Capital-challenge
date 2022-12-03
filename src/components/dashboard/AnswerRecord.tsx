@@ -2,6 +2,20 @@ import type { TAnswerRecord } from 'src/types/TQuest';
 
 import styles from 'src/styles/components/AnswerRecord.module.css'
 
+const ShowEachCapitalName = ({ capitalNames }: { capitalNames: string[] }) => {
+  return (
+    <>
+      {capitalNames.map((capitalName, idx) => {
+        if (idx > 0) {
+          return (<div key={capitalName}>, {capitalName} </div>)
+        } else {
+          return (<div key={capitalName}>{capitalName}</div>)
+        }
+      })}
+    </>
+  )
+}
+
 const AnswerRecord = ({ answerRecord }: { answerRecord: TAnswerRecord }) => {
   return (
     <div className={styles.answerRecordTable}>
@@ -18,15 +32,15 @@ const AnswerRecord = ({ answerRecord }: { answerRecord: TAnswerRecord }) => {
       </div>
       {answerRecord.map(singleAnswer =>
         <div key={singleAnswer.country} className={styles.singleRow}>
-          <div className={`${styles.col1} ${styles.col1Layout}`} 
+          <div className={`${styles.col1} ${styles.col1Layout}`}
             data-testid={`${singleAnswer.country}-col1-record`}>
             {singleAnswer.country}
           </div>
           <div className={`${styles.col2} ${styles.col2Layout}`}
             data-testid={`${singleAnswer.country}-col2-record`}>
-            {singleAnswer.capital}
+            <ShowEachCapitalName capitalNames={singleAnswer.capital} />
           </div>
-          <div className={`${styles.col3} ${styles.col3Layout}`} 
+          <div className={`${styles.col3} ${styles.col3Layout}`}
             data-testid={`${singleAnswer.country}-col3-record`}>
             {singleAnswer.timeSpent}
           </div>

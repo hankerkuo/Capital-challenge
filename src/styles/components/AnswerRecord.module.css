@@ -26,6 +26,7 @@
 .col2Layout {
   width: 100px;
   margin-right: 0.5rem;
+  display: flex;
 }
 
 .col2 {
