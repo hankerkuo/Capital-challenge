@@ -5,6 +5,7 @@ type Data = {
   name: string
 }
 
+// TODO: remove the api
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>

@@ -8,12 +8,12 @@ test('display answer record on table properly', () => {
   const answerRecord = [
     {
       country: 'Taiwan',
-      capital: 'Taipei',
+      capital: ['Taipei'],
       timeSpent: 200
     },
     {
       country: 'Japan',
-      capital: 'Tokyo',
+      capital: ['Tokyo'],
       timeSpent: 300
     },
   ];
