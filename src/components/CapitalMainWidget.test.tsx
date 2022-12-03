@@ -58,4 +58,6 @@ test('Disable the input element after all the quests been answered', async () =>
   expect(inputEle.disabled).toBeTruthy();
 });
 
+//TODO: test the popup notification
+
 // screen.logTestingPlaygroundURL();
