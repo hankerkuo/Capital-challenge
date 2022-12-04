@@ -11,10 +11,12 @@ import useTimer from 'src/hooks/useTimer';
 import QuestStateReducer from 'src/reducer/QuestStateReducer';
 import { QuestActionEnum } from 'src/reducer/QuestStateReducer';
 
+import type { TQuestObj } from 'src/types/TQuest';
+
 import styles from 'src/styles/components/CapitalMainWidget.module.css'
 
 type TCapitalMainWidgetProps = {
-  countries: { [country: string]: string[] };
+  countries: TQuestObj[];
 }
 
 const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
@@ -29,7 +31,7 @@ const CapitalMainWidget = ({ countries }: TCapitalMainWidgetProps) => {
     quest: { country: '', capital: [''] },
     answerRecord: [],
     gameOngoing: false,
-    remainQuest: {}
+    remainQuest: []
   });
 
   const actions = {

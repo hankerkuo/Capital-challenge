@@ -4,7 +4,7 @@ import CapitalMainWidget from 'src/components/CapitalMainWidget'
 
 //TODO: replace by data in database
 import Countries from 'src/dataMock/Countries';
-import { OneCountry } from 'src/dataMock/Countries';
+import { OneCountry, newCountries } from 'src/dataMock/Countries';
 
 const Capital: NextPage = () => {
   return (
@@ -16,7 +16,7 @@ const Capital: NextPage = () => {
       </Head>
 
       <div>
-        <CapitalMainWidget countries={Countries} />
+        <CapitalMainWidget countries={newCountries} />
       </div>
     </div>
   )

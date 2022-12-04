@@ -5,10 +5,11 @@ import '@testing-library/jest-dom'
 import CapitalMainWidget from './CapitalMainWidget'
 
 import Countries from 'src/dataMock/Countries';
+import { newCountries } from 'src/dataMock/Countries';
 
 test('Input is only enabled after pressing start button', async() => {
   const user = userEvent.setup();
-  render(<CapitalMainWidget countries={Countries} />);
+  render(<CapitalMainWidget countries={newCountries} />);
   const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
   const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
   expect(inputEle.disabled).toBeTruthy();
@@ -18,7 +19,7 @@ test('Input is only enabled after pressing start button', async() => {
 
 test('Capital main widget start timer while input', async () => {
   const user = userEvent.setup();
-  render(<CapitalMainWidget countries={Countries} />);
+  render(<CapitalMainWidget countries={newCountries} />);
   const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
   expect(startBtnEle.textContent).toBe('Start Game');
   const inputEle = screen.getByTestId('answer-input');
@@ -29,9 +30,12 @@ test('Capital main widget start timer while input', async () => {
 
 test('Show time spent in the table after answer the right answer', async () => {
   const user = userEvent.setup();
-  const singleCountry = {
-    'Korea': ['Seoul']
-  }
+  const singleCountry = [
+    {
+      country: 'Korea',
+      capital: ['Seoul']
+    }
+  ]
   render(<CapitalMainWidget countries={singleCountry} />);
   // start the game
   const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
@@ -47,9 +51,12 @@ test('Show time spent in the table after answer the right answer', async () => {
 
 test('Disable the input element after all the quests been answered', async () => {
   const user = userEvent.setup();
-  const singleCountry = {
-    'Korea': ['Seoul']
-  }
+  const singleCountry = [
+    {
+      country: 'Korea',
+      capital: ['Seoul']
+    }
+  ]
   render(<CapitalMainWidget countries={singleCountry} />);
   const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
   const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
@@ -59,5 +66,5 @@ test('Disable the input element after all the quests been answered', async () =>
 });
 
 //TODO: test the popup notification
-
+//TODO: test the "next quest" functionality when input the right answer
 // screen.logTestingPlaygroundURL();
