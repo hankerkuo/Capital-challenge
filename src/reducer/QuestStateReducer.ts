@@ -1,7 +1,7 @@
 import type { RefObject, 
   Reducer, Dispatch, SetStateAction } from 'react';
 
-import RandomUtil from 'src/utils/RandomUtil';
+import QuestGenerator from 'src/module/QuestGenerator';
 import type { TQuestObj, TAnswerRecord } from 'src/types/TQuest';
 
 export type TQuestState = {
@@ -12,7 +12,7 @@ export type TQuestState = {
   // track the game start and end
   gameOngoing: boolean;
   // for extracting next quest
-  remainQuest: { [country: string]: string[] };
+  remainQuest: TQuestObj[];
 }
 
 export enum QuestActionEnum {
@@ -25,7 +25,7 @@ export enum QuestActionEnum {
 
 export type TQuestAction = {
   type: QuestActionEnum;
-  countries: { [country: string]: string[] };
+  countries: TQuestObj[];
   inputEle: RefObject<HTMLInputElement>;
   timer: number;
   startTimer: () => void;
@@ -38,7 +38,8 @@ const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) =>
     case QuestActionEnum.START:
       action.inputEle.current!.disabled = false;
       action.inputEle.current!.placeholder = 'TYPE YOUR ANSWER';
-      const randomStartQuest = RandomUtil.getOneKeyValueFromObj(action.countries);
+      const randomStartQuest = 
+        QuestGenerator.getOneKeyValueFromArray(action.countries);
       return { ...state, remainQuest: action.countries, answerRecord: [], quest: {
         country: randomStartQuest!.key,
         capital: randomStartQuest!.value
@@ -51,9 +52,11 @@ const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) =>
         capital: state.quest.capital,
         timeSpent: action.timer
       });
+
+      let newRemain = [ ...state.remainQuest ];
       // remove the answered one from the remain task
-      const newRemain = { ...state.remainQuest };
-      delete newRemain[state.quest.country];
+      newRemain = newRemain.filter(ele => ele.country !== state.quest.country);
+      
       // remove text from the input
       action.inputEle.current!.value = '';
       action.resetTimer();
@@ -65,7 +68,8 @@ const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) =>
       action.setPause(true);
       return { ...state, gameOngoing: false };
     case QuestActionEnum.NEXT_QUEST:
-      const randomQuestion = RandomUtil.getOneKeyValueFromObj(state.remainQuest);
+      const randomQuestion = 
+        QuestGenerator.getOneKeyValueFromArray(state.remainQuest);
       return {
         ...state, quest: {
           country: randomQuestion!.key,
