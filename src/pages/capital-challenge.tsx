@@ -1,12 +1,21 @@
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import CapitalMainWidget from 'src/components/CapitalMainWidget'
 
 //TODO: replace by data in database
 import Countries from 'src/dataMock/Countries';
-import { OneCountry, newCountries } from 'src/dataMock/Countries';
+// import { OneCountry, newCountries } from 'src/dataMock/Countries';
 
 const Capital: NextPage = () => {
+  const [newCountries, setNewCountries] = useState([]);
+  useEffect(() => {
+    const fetchData = async() => {
+      const data = await fetch('/api/capital-challenge/country-capital');
+      setNewCountries(await data.json());
+    }
+    fetchData();
+  }, []);
   return (
     <div>
       <Head>
