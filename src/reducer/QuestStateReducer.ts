@@ -25,12 +25,11 @@ export enum QuestActionEnum {
 
 export type TQuestAction = {
   type: QuestActionEnum;
-  countries: TQuestObj[];
+  quests: TQuestObj[];
   inputEle: RefObject<HTMLInputElement>;
   timer: number;
   startTimer: () => void;
-  resetTimer: () => void;
-  setPause: Dispatch<SetStateAction<boolean>>;
+  stopTimer: () => void;
 }
 
 const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) => {
@@ -39,8 +38,8 @@ const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) =>
       action.inputEle.current!.disabled = false;
       action.inputEle.current!.placeholder = 'TYPE YOUR ANSWER';
       const randomStartQuest = 
-        QuestGenerator.getOneKeyValueFromArray(action.countries);
-      return { ...state, remainQuest: action.countries, answerRecord: [], quest: {
+        QuestGenerator.getOneKeyValueFromArray(action.quests);
+      return { ...state, remainQuest: action.quests, answerRecord: [], quest: {
         country: randomStartQuest!.key,
         capital: randomStartQuest!.value
       } };
@@ -59,13 +58,14 @@ const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) =>
       
       // remove text from the input
       action.inputEle.current!.value = '';
-      action.resetTimer();
+      action.stopTimer();
+      action.startTimer();
       return { ...state, answerRecord: newRecord, remainQuest: newRemain };
     case QuestActionEnum.QUEST_END:
-      // disable button after all quests are done
+      // disable input after all quests are done
       action.inputEle.current!.disabled = true;
       action.inputEle.current!.placeholder = 'FINISHED ALL QUESTS';
-      action.setPause(true);
+      action.stopTimer();
       return { ...state, gameOngoing: false };
     case QuestActionEnum.NEXT_QUEST:
       const randomQuestion = 
