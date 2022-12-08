@@ -3,7 +3,6 @@ type TCountryCapitalList = {
 }
 
 export const CountryCapitalList: TCountryCapitalList = {
-  "Country": ["Capital city"],
   "Afghanistan": ["Kabul"],
   "Albania": ["Tirana"],
   "Algeria": ["Algiers"],

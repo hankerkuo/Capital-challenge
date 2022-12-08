@@ -1,4 +1,4 @@
-const Countries = {
+const oldCountries = {
   'Taiwan': ['Taipei'],
   'Japan': ['Tokyo'],
   'Korea': ['Seoul'],
@@ -10,7 +10,7 @@ const Countries = {
   'Ukraine': ['Kyiv', 'Kiev']
 }
 
-const newCountries = [
+const Countries = [
   {
     id: '638ad063dc311c0a7a84c1fa',
     capital: [ 'Taipei' ],
@@ -34,9 +34,15 @@ const newCountries = [
   }
 ]
 
-const OneCountry = {
-  'Korea': ['Seoul']
-}
+const OneCountry = [
+  {
+    id: '638ad063dc311c0a7a84c1fa',
+    capital: [ 'Taipei' ],
+    country: 'Taiwan',
+    fts: null,
+    ftsx: null
+  },
+]
 
 export default Countries
-export { OneCountry, newCountries }
+export { OneCountry, oldCountries }
