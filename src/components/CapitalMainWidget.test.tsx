@@ -1,16 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
+import 'isomorphic-fetch';
 
 import CapitalMainWidget from './CapitalMainWidget'
+//TODO: fix UT here, some times works but sometimes not!
 
-import Countries from 'src/dataMock/Countries';
-import { newCountries } from 'src/dataMock/Countries';
-
-test('Input is only enabled after pressing start button', async() => {
+test('Input is only enabled after pressing start button', async () => {
   const user = userEvent.setup();
-  render(<CapitalMainWidget countries={newCountries} />);
-  const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
+  render(<CapitalMainWidget />);
+  const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
   const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
   expect(inputEle.disabled).toBeTruthy();
   await user.click(startBtnEle);
@@ -19,8 +18,8 @@ test('Input is only enabled after pressing start button', async() => {
 
 test('Capital main widget start timer while input', async () => {
   const user = userEvent.setup();
-  render(<CapitalMainWidget countries={newCountries} />);
-  const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
+  render(<CapitalMainWidget />);
+  const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
   expect(startBtnEle.textContent).toBe('Start Game');
   const inputEle = screen.getByTestId('answer-input');
   // simulate user input some text and timer is expected to start
@@ -30,38 +29,26 @@ test('Capital main widget start timer while input', async () => {
 
 test('Show time spent in the table after answer the right answer', async () => {
   const user = userEvent.setup();
-  const singleCountry = [
-    {
-      country: 'Korea',
-      capital: ['Seoul']
-    }
-  ]
-  render(<CapitalMainWidget countries={singleCountry} />);
+  render(<CapitalMainWidget />);
   // start the game
-  const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
+  const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
   await user.click(startBtnEle);
   const inputEle = screen.getByTestId('answer-input');
   // simulate user's typying time, delay between each character
-  await userEvent.type(inputEle, 'Seoul', { delay: 50 });
+  await userEvent.type(inputEle, 'Taipei', { delay: 50 });
   // check all the information has been shown in the table
-  expect(screen.getByTestId('Korea-col1-record').textContent).toBe('Korea');
-  expect(screen.getByTestId('Korea-col2-record').textContent).toBe('Seoul');
-  expect(screen.getByTestId('Korea-col3-record').textContent).not.toBe('0');
+  expect(screen.getByTestId('Taiwan-col1-record').textContent).toBe('Taiwan');
+  expect(screen.getByTestId('Taiwan-col2-record').textContent).toBe('Taipei');
+  expect(screen.getByTestId('Taiwan-col3-record').textContent).not.toBe('0');
 });
 
 test('Disable the input element after all the quests been answered', async () => {
   const user = userEvent.setup();
-  const singleCountry = [
-    {
-      country: 'Korea',
-      capital: ['Seoul']
-    }
-  ]
-  render(<CapitalMainWidget countries={singleCountry} />);
+  render(<CapitalMainWidget />);
   const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
-  const startBtnEle: HTMLButtonElement = screen.getByRole('button', {name: /Start Game/i});
+  const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
   await user.click(startBtnEle);
-  await userEvent.type(inputEle, 'Seoul', { delay: 10 });
+  await userEvent.type(inputEle, 'Taipei', { delay: 10 });
   expect(inputEle.disabled).toBeTruthy();
 });
 
