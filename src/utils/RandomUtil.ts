@@ -21,6 +21,10 @@ class RandomUtil {
     const length = array.length;
     if (length === 0) return null;
     if (targetX <= 0) throw Error("target random amount should be > 0");
+    if (targetX > length) {
+      console.log("desired amount larger than array length, return whole array");
+      return array;
+    }
     // pick a start point
     const startIdx = Math.floor(Math.random() * length);
     // pick a interval which won't exceed array length
