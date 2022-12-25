@@ -12,13 +12,11 @@ import useQuestfetch from 'src/hooks/useQuestfetch';
 import QuestStateReducer from 'src/reducer/QuestStateReducer';
 import { QuestActionEnum } from 'src/reducer/QuestStateReducer';
 
-import type { TQuestObj } from 'src/types/TQuest';
-
 import styles from 'src/styles/components/CapitalMainWidget.module.css'
 
 const CapitalMainWidget = () => {
   // quest data fetch
-  const { quests, isLoading, isError, refetch } = useQuestfetch(1);
+  const { quests, isLoading, isError, refetch } = useQuestfetch(5);
   // input ref to manipulate due to different game status
   const inputEle = useRef<HTMLInputElement>(null);
   // state for tracking each anwser's spent time (display on the screen)
@@ -74,14 +72,14 @@ const CapitalMainWidget = () => {
 
   return (
     <div className={`${styles.mainWidgetLyt} ${styles.mainWidget}`}>
-      {isLoading && <div>loading</div>}
+      {/* {isLoading && <div>loading</div>} */}
       {isError && <div>Error fetching data</div>}
       <div className={styles.leftRegionLyt}>
         <QuestAndHint quest={questState.quest} 
           timer={timer} showBlur={Object.keys(questState.remainQuest).length === 0}/>
         <AnswerInput {...{ inputEle, checkAnswer }} />
         {/* TODO: re-fetch data on start button */}
-        <StartButton {...{ questState, startNewGame, timer }} />
+        <StartButton {...{ questState, startNewGame, timer, pending: isLoading}} />
       </div>
       <div className={`${styles.rightRegionLyt} ${styles.rightRegion}`}>
         <AnswerRecord answerRecord={questState.answerRecord} />
