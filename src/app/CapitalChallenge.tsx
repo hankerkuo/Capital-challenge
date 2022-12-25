@@ -3,9 +3,6 @@
 import Head from 'next/head'
 import CapitalMainWidget from 'src/components/CapitalMainWidget'
 
-import Countries from 'src/dataMock/Countries';
-import { OneCountry } from 'src/dataMock/Countries';
-
 const CapitalChallenge = () => {
   return (
     <div>
@@ -16,7 +13,7 @@ const CapitalChallenge = () => {
       </Head>
 
       <div>
-        <CapitalMainWidget countries={Countries} />
+        <CapitalMainWidget />
       </div>
     </div>
   )
