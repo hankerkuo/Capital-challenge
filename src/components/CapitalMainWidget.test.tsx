@@ -4,7 +4,6 @@ import '@testing-library/jest-dom'
 import 'isomorphic-fetch';
 
 import CapitalMainWidget from './CapitalMainWidget'
-//TODO: fix UT here, some times works but sometimes not!
 
 test('Input is only enabled after pressing start button', async () => {
   const user = userEvent.setup();
