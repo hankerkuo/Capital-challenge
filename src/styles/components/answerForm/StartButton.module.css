@@ -25,7 +25,13 @@
 .spinnerAdjust {
   position: absolute;
   top: 10px;
+  left: 50px;
   animation-duration: 0.5s;
+  display: none;
+}
+
+.spinnerShow {
+  display: block;
 }
 
 .buttonDisabled {

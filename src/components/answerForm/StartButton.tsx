@@ -16,13 +16,15 @@ const StartButton = (
       pending: boolean
     }) => {
   let buttonCss = `${styles.newGameButtonLyt} ${styles.newGameButton}`;
+  let spinnerCss = `${styles.spinnerAdjust}`;
   props.pending ? buttonCss = `${buttonCss} ${styles.buttonDisabled}` : buttonCss;
+  props.pending ? spinnerCss = `${spinnerCss} ${styles.spinnerShow}` : spinnerCss;
   return (
     <div className={`${styles.buttonContainerLyt}`}>
-      {/* TODO: let spinning apears only when data is loading */}
-      <FontAwesomeIcon className={`${styles.spinnerAdjust}`}
+      <FontAwesomeIcon className={spinnerCss}
         icon={faCircleNotch} spin={true} />
       <button data-testid='start-btn-and-timer'
+        disabled={props.pending}
         className={buttonCss}
         onClick={props.startNewGame}>
         {props.questState.gameOngoing ? props.timer : 'Start Game'}
