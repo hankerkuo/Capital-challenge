@@ -1,10 +1,16 @@
-import DatabaseConnect from "src/utils/DatabaseConnect";
+import { WorldCapitals } from '@prisma/client';
 
+import { UseAspect, Advice } from 'ts-aspect';
+import LoggingAspect from 'src/aop/LoggingAspect.aop';
+import DatabaseConnect from "src/utils/DatabaseConnect";
 import type { TQuestObj } from "src/types/TQuest";
+
+export type TCountryCapitalFromDb = Promise<WorldCapitals[] | null>;
 
 export default class CapitalChallengeDB extends DatabaseConnect {
 
-  async getAllCountryCapital() {
+  @UseAspect(Advice.Before, LoggingAspect)
+  async getAllCountryCapital(): TCountryCapitalFromDb {
     let result = null;
     try {
       result = await this.prismaClient.worldCapitals.findMany();
@@ -14,7 +20,8 @@ export default class CapitalChallengeDB extends DatabaseConnect {
     return result;
   }
 
-  async insertSingleContry(object: TQuestObj) {
+  @UseAspect(Advice.Before, LoggingAspect)
+  async insertSingleContry(object: TQuestObj): Promise<WorldCapitals> {
     const insertResult = await this.prismaClient.worldCapitals.create({
       data: {
         country: object.country,
@@ -24,8 +31,14 @@ export default class CapitalChallengeDB extends DatabaseConnect {
     return insertResult;
   }
 
-  async dropCollection() {
-    await this.prismaClient.worldCapitals.deleteMany();
+  @UseAspect(Advice.Before, LoggingAspect)
+  async dropCollection(): Promise<void> {
+    try {
+      await this.prismaClient.worldCapitals.deleteMany();
+    } catch(e) {
+      console.error(e);
+      throw 'Error while deleting whole collection';
+    }
   }
   
 }

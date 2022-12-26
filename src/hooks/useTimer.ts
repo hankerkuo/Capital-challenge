@@ -16,6 +16,11 @@ const useTimer = (interval :number) => {
     setPause(false);
   }
 
+  const stopTimer = () => {
+    setTimer(0);
+    setPause(true);
+  }
+
   useEffect(() => {
     if(!pause) {
       const timerInterval = setInterval(() => {
@@ -26,7 +31,7 @@ const useTimer = (interval :number) => {
     }
   }, [startDate, pause, interval]);
 
-  return {timer, resetTimer, startTimer, setPause };
+  return {timer, resetTimer, startTimer, stopTimer, setPause };
 };
 
 export default useTimer

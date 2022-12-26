@@ -1,3 +1,7 @@
+.buttonContainerLyt {
+  position: relative;
+}
+
 .newGameButtonLyt {
   width: 100%;
   padding: 0.5rem;
@@ -5,7 +9,7 @@
 }
 
 .newGameButton {
-  background: #4CE2A7;
+  background: hsl(156, 72%, 59%);
   border-radius: 0.375rem;
   border: 1px solid;
   font-family: 'Lato', sans-serif;
@@ -14,6 +18,26 @@
 }
 
 .newGameButton:hover {
-  background: #76EFBF;
+  background: hsl(156, 79%, 70%);
   cursor: pointer;
+}
+
+.spinnerAdjust {
+  position: absolute;
+  top: 10px;
+  left: 50px;
+  animation-duration: 0.5s;
+  display: none;
+}
+
+.spinnerShow {
+  display: block;
+}
+
+.buttonDisabled {
+  background: hsl(156, 79%, 20%);
+}
+
+.buttonDisabled:hover {
+  background: hsl(156, 79%, 20%);
 }
