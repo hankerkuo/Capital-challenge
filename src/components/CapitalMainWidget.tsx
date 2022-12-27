@@ -3,6 +3,7 @@ import type { ChangeEvent } from 'react';
 
 import QuestAndHint from 'src/components/answerForm/QuestAndHint';
 import AnswerInput from 'src/components/answerForm/AnswerInput';
+import QuestOption from './answerForm/QuestOption';
 import StartButton from 'src/components/answerForm/StartButton';
 import AnswerRecord from 'src/components/dashboard/AnswerRecord';
 import PopupNotification from 'src/components/notification/PopupNotification';
@@ -15,8 +16,10 @@ import { QuestActionEnum } from 'src/reducer/QuestStateReducer';
 import styles from 'src/styles/components/CapitalMainWidget.module.css'
 
 const CapitalMainWidget = () => {
+  // quest amount state
+  const [questAmount, setQuestAmount] = useState<number>(1);
   // quest data fetch
-  const { quests, isLoading, isError, refetch } = useQuestfetch(5);
+  const { quests, isLoading, isError, refetch } = useQuestfetch(questAmount);
   // input ref to manipulate due to different game status
   const inputEle = useRef<HTMLInputElement>(null);
   // state for tracking each anwser's spent time (display on the screen)
@@ -79,7 +82,10 @@ const CapitalMainWidget = () => {
           timer={timer} showBlur={Object.keys(questState.remainQuest).length === 0}/>
         <AnswerInput {...{ inputEle, checkAnswer }} />
         {/* TODO: re-fetch data on start button */}
-        <StartButton {...{ questState, startNewGame, timer, pending: isLoading}} />
+        <div className={`${styles.buttonContainerLyt}`}>
+          <QuestOption setTargetQuestAmount={setQuestAmount} />
+          <StartButton {...{ questState, startNewGame, timer, pending: isLoading}} />
+        </div>
       </div>
       <div className={`${styles.rightRegionLyt} ${styles.rightRegion}`}>
         <AnswerRecord answerRecord={questState.answerRecord} />
