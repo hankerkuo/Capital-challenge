@@ -1,9 +1,18 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { SWRConfig } from 'swr';
 import '@testing-library/jest-dom'
 import 'isomorphic-fetch';
 
 import CapitalMainWidget from './CapitalMainWidget'
+import ResponseSingleton from '../mocks/ResponseSingleton'
+
+afterEach(() => {
+  // be sure the set singleton to return default response (1 country)
+  // after each test
+  const response = ResponseSingleton.getInstance();
+  response.setCountryCapitalResponseToDefault();
+});
 
 test('Input is only enabled after pressing start button', async () => {
   const user = userEvent.setup();
@@ -17,7 +26,11 @@ test('Input is only enabled after pressing start button', async () => {
 
 test('Capital main widget start timer while input', async () => {
   const user = userEvent.setup();
-  render(<CapitalMainWidget />);
+  // be sure to render with SWRConfig to remove cache
+  render(
+    <SWRConfig value={{ provider: () => new Map() }}>
+      <CapitalMainWidget />
+    </SWRConfig>);
   const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
   expect(startBtnEle.textContent).toBe('Start Game');
   const inputEle = screen.getByTestId('answer-input');
@@ -28,7 +41,10 @@ test('Capital main widget start timer while input', async () => {
 
 test('Show time spent in the table after answer the right answer', async () => {
   const user = userEvent.setup();
-  render(<CapitalMainWidget />);
+  render(
+    <SWRConfig value={{ provider: () => new Map() }}>
+      <CapitalMainWidget />
+    </SWRConfig>);
   // start the game
   const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
   await user.click(startBtnEle);
@@ -43,7 +59,10 @@ test('Show time spent in the table after answer the right answer', async () => {
 
 test('Disable the input element after all the quests been answered', async () => {
   const user = userEvent.setup();
-  render(<CapitalMainWidget />);
+  render(
+    <SWRConfig value={{ provider: () => new Map() }}>
+      <CapitalMainWidget />
+    </SWRConfig>);
   const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
   const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
   await user.click(startBtnEle);
