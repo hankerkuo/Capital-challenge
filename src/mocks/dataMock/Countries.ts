@@ -44,5 +44,22 @@ const OneCountry = [
   },
 ]
 
+const TwoCountry = [
+  {
+    id: '638ad063dc311c0a7a84c1fa',
+    capital: [ 'Taipei' ],
+    country: 'Taiwan',
+    fts: null,
+    ftsx: null
+  },
+  {
+    id: 'lksjdfklshadrew7898123hk',
+    capital: [ 'Tokyo' ],
+    country: 'Japan',
+    fts: null,
+    ftsx: null
+  }
+]
+
 export default Countries
-export { OneCountry, oldCountries }
+export { OneCountry, oldCountries, TwoCountry }
