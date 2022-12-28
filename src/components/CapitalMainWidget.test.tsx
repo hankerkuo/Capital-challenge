@@ -51,6 +51,47 @@ test('Disable the input element after all the quests been answered', async () =>
   expect(inputEle.disabled).toBeTruthy();
 });
 
-//TODO: test the popup notification
-//TODO: test the "next quest" functionality when input the right answer
+test('Show the game end notification after all the quests been answered', async () => {
+  const user = userEvent.setup();
+  render(
+    <SWRConfig value={{ provider: () => new Map() }}>
+      <CapitalMainWidget />
+    </SWRConfig>);
+  const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
+  const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
+  await user.click(startBtnEle);
+  await userEvent.type(inputEle, 'Taipei', { delay: 10 });
+  const gameEndNotificationCloseBtn = await screen.findByRole('button', { name: /close/i });
+  const gameEndNotificationParagraph = await screen.findByText('Game Completed and recorded!');
+  expect(gameEndNotificationCloseBtn).toBeInTheDocument();
+  expect(gameEndNotificationParagraph).toBeInTheDocument();
+});
+
+test('Show the next quest after input the right answer', async () => {
+  const response = ResponseSingleton.getInstance();
+  response.setCountryCapitalResponseToTwo();
+  const user = userEvent.setup();
+  render(
+    <SWRConfig value={{ provider: () => new Map() }}>
+      <CapitalMainWidget />
+    </SWRConfig>);
+  const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
+  const questOptionEle: HTMLInputElement = screen.getByTestId('quest-option-target-quest-amount');
+  const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
+
+  await userEvent.type(questOptionEle, '2', { delay: 10 });
+  await user.click(startBtnEle);
+  const questTitle: HTMLElement | null = screen.queryByText('Taiwan');
+  // the first quest will be either Taiwan or Japan
+  // so next quest will be the other one
+  if (questTitle) {
+    await userEvent.type(inputEle, 'Taipei', { delay: 10 });
+    // check next quest displayed
+    expect(await screen.findByText(/Japan/)).toBeVisible();
+  } else {
+    await userEvent.type(inputEle, 'Tokyo', { delay: 10 });
+    // check next quest displayed
+    expect(await screen.findByText(/Taiwan/)).toBeVisible();
+  }
+});
 // screen.logTestingPlaygroundURL();
