@@ -23,17 +23,7 @@ const HintChar = ({ capital, idx }: { capital: string, idx: number }) => {
 // possible for user to choose lower interval and maybe typing challenge mode?
 const QuestAndHint = ({ quest, timer, showBlur }:
   { quest: TQuestObj, timer: number, showBlur: boolean }) => {
-  // hint provide to gamer
-  const [hintIdx, setHintIdx] = useState<number>(0);
-
-  if (hintIdx !== 0 && timer < GameConfig.SECOND_PASSED_TO_GIVE_HINT) {
-    setHintIdx(0);
-  }
-  if (timer > GameConfig.SECOND_PASSED_TO_GIVE_HINT + hintIdx * GameConfig.INTERVAL_TO_GIVE_HINT) {
-    console.log('Give next hint');
-    setHintIdx(prev => prev + 1);
-  }
-
+    
   const calculateAggregatedCapital = (capital: string[]) => {
     const aggregatedCapital = capital.reduce((prev, cur, curIdx) => {
       let result: string = prev;
@@ -45,9 +35,22 @@ const QuestAndHint = ({ quest, timer, showBlur }:
     }, '');
     return aggregatedCapital;
   }
-
+  
   const aggregatedCapital = useMemo<string>(
-    () => calculateAggregatedCapital(quest.capital), [quest.capital]);
+    () => calculateAggregatedCapital(quest.capital), [quest.capital]);  
+  
+  // hint provide to gamer
+  const [hintIdx, setHintIdx] = useState<number>(0);
+
+  if (hintIdx !== 0 && timer < GameConfig.SECOND_PASSED_TO_GIVE_HINT) {
+    setHintIdx(0);
+  }
+  if (timer > GameConfig.SECOND_PASSED_TO_GIVE_HINT + hintIdx * GameConfig.INTERVAL_TO_GIVE_HINT) {
+    if (hintIdx <= aggregatedCapital.length) {
+      console.log('Give next hint');
+      setHintIdx(prev => prev + 1);
+    }
+  }
 
   return (
     <div key={quest.country} className={`${styles.countryTitle} ${styles.countryTitleLyt}`}>
