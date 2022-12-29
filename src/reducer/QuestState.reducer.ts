@@ -1,7 +1,7 @@
 import type { RefObject, 
   Reducer, Dispatch, SetStateAction } from 'react';
 
-import QuestGenerator from 'src/module/QuestGenerator';
+import QuestGenerator from 'src/module/QuestGenerator.module';
 import type { TQuestObj, TAnswerRecord } from 'src/types/TQuest';
 
 export type TQuestState = {

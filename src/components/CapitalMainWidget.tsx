@@ -10,8 +10,8 @@ import PopupNotification from 'src/components/notification/PopupNotification';
 
 import useTimer from 'src/hooks/useTimer';
 import useQuestfetch from 'src/hooks/useQuestfetch';
-import QuestStateReducer from 'src/reducer/QuestStateReducer';
-import { QuestActionEnum } from 'src/reducer/QuestStateReducer';
+import QuestStateReducer from 'src/reducer/QuestState.reducer';
+import { QuestActionEnum } from 'src/reducer/QuestState.reducer';
 
 import styles from 'src/styles/components/CapitalMainWidget.module.css'
 

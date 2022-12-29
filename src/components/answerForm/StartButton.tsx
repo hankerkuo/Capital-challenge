@@ -3,7 +3,7 @@ import {
   faCircleNotch,
 } from "@fortawesome/free-solid-svg-icons";
 
-import type { TQuestState } from 'src/reducer/QuestStateReducer';
+import type { TQuestState } from 'src/reducer/QuestState.reducer';
 
 import styles from 'src/styles/components/answerForm/StartButton.module.css'
 

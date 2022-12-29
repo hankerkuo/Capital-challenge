@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import callMeToDelay from 'src/utils/FakeDelay';
-import CountryCapitalAPI from 'src/service/CountryCapitalAPI';
+import CountryCapitalAPI from 'src/service/CountryCapitalAPI.service';
 
 // TODO: add more flexibility of getting amounts of country-capital entries
 export default async function handler(
