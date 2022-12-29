@@ -23,10 +23,10 @@ const QuestOption = (props: {
   return (
     <div className={styles.questOptionLyt}>
       <input type="text"
-        placeholder={`quest, min: ${MIN_QUEST_AMOUNT} max: ${MAX_QUEST_AMOUNT}`}
+        placeholder={`min: ${MIN_QUEST_AMOUNT} max: ${MAX_QUEST_AMOUNT}`}
         onChange={(e) => inputHandler(e, props.setTargetQuestAmount)}
         data-testid={`quest-option-target-quest-amount`}
-        className={`${styles.questOptionInput}`} />
+        className={`${styles.questOptionInputLyt} ${styles.questOptionInput}`} />
     </div>
   )
 }
