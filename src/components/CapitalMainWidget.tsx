@@ -1,4 +1,4 @@
-import { useRef, useReducer, useState } from 'react';
+import { useRef, useReducer, useState, useContext } from 'react';
 import type { ChangeEvent } from 'react';
 
 import QuestAndHint from 'src/components/answerForm/QuestAndHint';
@@ -7,15 +7,20 @@ import QuestOption from './answerForm/QuestOption';
 import StartButton from 'src/components/answerForm/StartButton';
 import AnswerRecord from 'src/components/dashboard/AnswerRecord';
 import PopupNotification from 'src/components/notification/PopupNotification';
+import LoginWrapper from './account/LoginWrapper';
 
 import useTimer from 'src/hooks/useTimer';
 import useQuestfetch from 'src/hooks/useQuestfetch';
 import QuestStateReducer from 'src/reducer/QuestState.reducer';
 import { QuestActionEnum } from 'src/reducer/QuestState.reducer';
 
+import { CurrentUserContext } from 'src/pages/capital-challenge';
+
 import styles from 'src/styles/components/CapitalMainWidget.module.css'
 
 const CapitalMainWidget = () => {
+  // current user
+  const {user} = useContext(CurrentUserContext);
   // quest amount state
   const [questAmount, setQuestAmount] = useState<number>(1);
   // quest data fetch
@@ -92,6 +97,9 @@ const CapitalMainWidget = () => {
       </div>
       <div>
         <PopupNotification renewSignal={notifyGameEnd} text={'Game Completed and recorded!'}/>
+      </div>
+      <div>
+        <LoginWrapper user={user}/>
       </div>
     </div>
   )
