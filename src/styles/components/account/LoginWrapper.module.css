@@ -1,0 +1,16 @@
+.containerLyt {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.currentUserLyt {
+  margin-right: 1rem;
+}
+
+.currentUserFont {
+  color: #5348DF;
+  font-family: Space Grotesk,sans-serif;
+}

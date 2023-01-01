@@ -1,0 +1,35 @@
+@keyframes rollout {
+  0% { transform: translateX(20rem); }
+  100% { transform: none; }
+}
+
+.containerLyt {
+  position: fixed;
+  top: 3rem;
+  right: 1rem;
+}
+
+.container {
+  border-style: solid;
+  border-width: thin;
+  border-radius: 0.5rem;
+  border-color: #5348DF;
+  background-image: linear-gradient(to right, rgba(54, 54, 111, 0.5), rgba(38, 38, 79, 0.5));
+  animation: rollout 0.4s;
+}
+
+.font {
+  padding: 0.5rem;
+  color: #5348DF;
+  font-family: Space Grotesk,sans-serif;
+}
+
+.loginInput {
+  border: 1px solid;
+  border-color: rgba(255, 255, 255, 0.24);
+  border-radius: 0.375rem;
+  background: inherit;
+  outline: 2px solid transparent;
+  transition-duration: 300ms;
+  color: #fff;
+}
