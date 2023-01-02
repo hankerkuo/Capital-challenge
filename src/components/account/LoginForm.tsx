@@ -44,6 +44,7 @@ const LoginForm = ({closeLoginForm}: {closeLoginForm: () => void}) => {
     // Get the response data from server as JSON.
     // If server returns the name submitted, that means the form works.
     const result = await response.json();
+    //TODO: handle UI when login failed
     setUser(result.user);
     closeLoginForm();
     // alert(`Is this your full name: ${result.user}`);
@@ -75,8 +76,11 @@ const LoginForm = ({closeLoginForm}: {closeLoginForm: () => void}) => {
           maxLength={20}
         />
         <br />
-        <input type="submit" value="Login" />
-        <br />
+        <div className={`${styles.submitButtonWrapperLyt}`}>
+          <input 
+            className={`${styles.submitButtonLyt} ${styles.submitButton}`}
+            type="submit" value="Login" />
+        </div>
       </form>
     </div>
   );
