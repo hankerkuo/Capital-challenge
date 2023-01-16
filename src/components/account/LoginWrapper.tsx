@@ -4,6 +4,7 @@ import styles from "src/styles/components/account/LoginWrapper.module.css";
 
 import LoginButton from "src/components/account/LoginButton";
 import LoginForm from "src/components/account/LoginForm";
+import GoogleLogin from "src/components/account/GoogleLogin";
 
 const CurrentUser = ({ user }: { user: string }) => {
   return (
@@ -24,7 +25,8 @@ const LoginWrapper = ({ user }: { user: string }) => {
     <>
       <div className={`${styles.containerLyt}`}>
         <CurrentUser user={user} />
-        <LoginButton handleLoginButton={handleLoginButton}/>
+        {/* <LoginButton handleLoginButton={handleLoginButton}/> */}
+        <GoogleLogin />
       </div>
       {showHideLoginForm ? <LoginForm closeLoginForm={closeLoginForm}/>: null}
     </>
