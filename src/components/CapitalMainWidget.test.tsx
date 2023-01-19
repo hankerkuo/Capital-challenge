@@ -7,6 +7,14 @@ import 'isomorphic-fetch';
 import CapitalMainWidget from './CapitalMainWidget'
 import ResponseSingleton from '../mocks/ResponseSingleton'
 
+jest.mock('next-auth/react');
+import { useSession } from 'next-auth/react';
+
+// mock the useSession hook in next auth
+const mockUseSession = useSession as jest.Mock;
+// return empty session, as /api/auth/session will return when not logged in
+mockUseSession.mockReturnValue({});
+
 afterEach(() => {
   // be sure the set singleton to return default response (1 country)
   // after each test
@@ -16,7 +24,9 @@ afterEach(() => {
 
 test('Input is only enabled after pressing start button', async () => {
   const user = userEvent.setup();
-  render(<CapitalMainWidget />);
+  render(
+    <CapitalMainWidget />
+  );
   const startBtnEle: HTMLButtonElement = await screen.findByRole('button', { name: /Start Game/i });
   const inputEle: HTMLInputElement = screen.getByTestId('answer-input');
   expect(inputEle.disabled).toBeTruthy();
