@@ -15,6 +15,7 @@ import QuestStateReducer from 'src/reducer/QuestState.reducer';
 import { QuestActionEnum } from 'src/reducer/QuestState.reducer';
 
 import { CurrentUserContext } from 'src/pages/capital-challenge';
+import Logger from 'src/utils/Logger';
 
 import styles from 'src/styles/components/CapitalMainWidget.module.css'
 
@@ -48,7 +49,8 @@ const CapitalMainWidget = () => {
   }
 
   const startNewGame = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.currentTarget.textContent = 'Game started';
+    e.currentTarget.textContent = 'Start again';
+    refetch();
     gameUpdate({ type: QuestActionEnum.START, ...actions });
   }
 
@@ -70,7 +72,7 @@ const CapitalMainWidget = () => {
       if (Object.keys(questState.remainQuest).length - 1 > 0) {
         gameUpdate({ type: QuestActionEnum.NEXT_QUEST, ...actions });
       } else {
-        console.log('ended');
+        Logger.log('ended');
         gameUpdate({ type: QuestActionEnum.QUEST_END, ...actions });
         setNotifyGameEnd((prev) => !prev);
       }
