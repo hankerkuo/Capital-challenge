@@ -20,3 +20,8 @@
   background: hsl(156, 79%, 70%);
   cursor: pointer;
 }
+
+.button:disabled {
+  background: hsl(156, 79%, 20%);
+  cursor: not-allowed;
+}
