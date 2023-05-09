@@ -12,12 +12,12 @@
 .countryTitleLyt {
   padding-bottom: 1rem;
   display: flex;
+  line-height: 1.5rem;
 }
 
 .countryTitle {
   font-family: 'Lato', sans-serif;
   color: #53A8F1;
-  font-size: 1.5rem;
 }
 
 .hintChar{
@@ -32,6 +32,7 @@
 
 .hintCharLyt {
   margin: 0;
+  height: 1.5rem;
 }
 
 .titlePLyt{

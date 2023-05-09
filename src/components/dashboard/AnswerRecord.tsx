@@ -2,7 +2,11 @@ import type { TAnswerRecord } from 'src/types/TQuest';
 
 import styles from 'src/styles/components/AnswerRecord.module.css'
 
-const ShowEachCapitalName = ({ capitalNames }: { capitalNames: string[] }) => {
+const ShowEachCapitalName = ({ capitalNames, onlyFirst=false }: 
+  { capitalNames: string[], onlyFirst?: boolean }) => {
+  if (onlyFirst) {
+    capitalNames = [capitalNames[0]];
+  }
   return (
     <>
       {capitalNames.map((capitalName, idx) => {
@@ -27,7 +31,7 @@ const AnswerRecord = ({ answerRecord }: { answerRecord: TAnswerRecord }) => {
           Capital
         </div>
         <div className={`${styles.col3} ${styles.col3Layout}`}>
-          Time spent
+          Speed
         </div>
       </div>
       {answerRecord.map(singleAnswer =>
@@ -38,7 +42,7 @@ const AnswerRecord = ({ answerRecord }: { answerRecord: TAnswerRecord }) => {
           </div>
           <div className={`${styles.col2} ${styles.col2Layout}`}
             data-testid={`${singleAnswer.country}-col2-record`}>
-            <ShowEachCapitalName capitalNames={singleAnswer.capital} />
+            <ShowEachCapitalName capitalNames={singleAnswer.capital} onlyFirst={true}/>
           </div>
           <div className={`${styles.col3} ${styles.col3Layout}`}
             data-testid={`${singleAnswer.country}-col3-record`}>

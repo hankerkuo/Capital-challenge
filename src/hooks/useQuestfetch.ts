@@ -19,7 +19,7 @@ const useQuestfetch = (amount: number) => {
     `${apiUrlPrefix}/api/capital-challenge/country-capital`, fetcher);
   let dataNeeded = undefined;
   if(data){
-    dataNeeded = RandomUtil.getXFromArray<TQuestObj>(data, amount);
+    dataNeeded = RandomUtil.getXFromArray<TQuestObj>(data, amount <= 0 ? 1 : amount);
   }
   return {
     quests: dataNeeded,
