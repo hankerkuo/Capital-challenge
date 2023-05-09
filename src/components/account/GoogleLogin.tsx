@@ -1,18 +1,29 @@
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn, signOut } from 'next-auth/react';
+
+import styles from 'src/styles/components/account/GoogleLogin.module.css';
+
 export default function Component() {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   if (session) {
     return (
       <>
-        Signed in as {session.user? session.user.email : '_blank'} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        <span className={`${styles.currentUserFont} ${styles.currentUserLyt}`}>
+          Signed in as {session.user ? session.user.name : '_blank'}
+        </span>
+        <button className={styles.button} onClick={() => signOut()}>
+          Sign out
+        </button>
       </>
-    )
+    );
   }
   return (
     <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+      <span className={`${styles.currentUserFont} ${styles.currentUserLyt}`}>
+        Not signed in
+      </span>
+      <button className={styles.button} onClick={() => signIn()}>
+        Sign in
+      </button>
     </>
-  )
+  );
 }

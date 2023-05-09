@@ -24,7 +24,7 @@ const LoginWrapper = ({ user }: { user: string }) => {
   return (
     <>
       <div className={`${styles.containerLyt}`}>
-        <CurrentUser user={user} />
+        {/* <CurrentUser user={user} /> */}
         {/* <LoginButton handleLoginButton={handleLoginButton}/> */}
         <GoogleLogin />
       </div>
