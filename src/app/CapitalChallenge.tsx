@@ -13,7 +13,7 @@ const CapitalChallenge = () => {
       </Head>
 
       <div>
-        <CapitalMainWidget />
+        {/* <CapitalMainWidget /> */}
       </div>
     </div>
   )
