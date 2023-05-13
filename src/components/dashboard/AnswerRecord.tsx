@@ -33,6 +33,8 @@ const AnswerRecord = ({ answerRecord }: { answerRecord: TAnswerRecord }) => {
         <div className={`${styles.col3} ${styles.col3Layout}`}>
           Speed
         </div>
+        {/* TODO: Add a new column here for integration with ChatGPT service, like giving some random
+        comments on the country and capital */}
       </div>
       {answerRecord.map(singleAnswer =>
         <div key={singleAnswer.country} className={styles.singleRow}>

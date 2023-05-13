@@ -61,6 +61,8 @@ const CapitalMainWidget = () => {
     }
     let answerMatched = false;
     questState.quest.capital.forEach(capitalName => {
+      // TODO: add toleration of special characters
+      // e.g. São Tomé, should be matched by a or e
       if (e.target.value.toLowerCase() === capitalName.toLowerCase()) {
         answerMatched = true;
       }
