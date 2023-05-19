@@ -4,6 +4,7 @@ import { UseAspect, Advice } from 'ts-aspect';
 import LoggingAspect from 'src/aop/LoggingAspect.aop';
 import DatabaseConnect from "src/utils/DatabaseConnect";
 import type { TQuestObj } from "src/types/TQuest";
+import Logger from 'src/utils/Logger';
 
 export type TCountryCapitalFromDb = Promise<WorldCapitals[] | null>;
 
@@ -15,7 +16,7 @@ export default class CapitalChallengeDB extends DatabaseConnect {
     try {
       result = await this.prismaClient.worldCapitals.findMany();
     } catch (err) {
-      console.log(err);
+      Logger.error(err);
     }
     return result;
   }
