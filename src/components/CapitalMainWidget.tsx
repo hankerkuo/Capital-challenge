@@ -8,6 +8,7 @@ import StartButton from 'src/components/answerForm/StartButton';
 import AnswerRecord from 'src/components/dashboard/AnswerRecord';
 import PopupNotification from 'src/components/notification/PopupNotification';
 import LoginWrapper from './account/LoginWrapper';
+import WorldMap from './worldMap/WorldMap';
 
 import useTimer from 'src/hooks/useTimer';
 import useQuestfetch from 'src/hooks/useQuestfetch';
@@ -95,6 +96,7 @@ const CapitalMainWidget = () => {
           <QuestOption setTargetQuestAmount={setQuestAmount} />
           <StartButton {...{ questState, startNewGame, timer, pending: isLoading}} />
         </div>
+        <WorldMap />
       </div>
       <div className={`${styles.rightRegionLyt} ${styles.rightRegion}`}>
         <AnswerRecord answerRecord={questState.answerRecord} />
