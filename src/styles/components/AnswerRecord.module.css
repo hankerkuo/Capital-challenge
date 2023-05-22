@@ -1,16 +1,6 @@
 .answerRecordTable {
+  border-collapse: collapse;
   color: #fff;
-}
-
-.title {
-  display: flex;
-  border-style: none none solid none;
-  border-color: #fff;
-  border-width: 5px;
-}
-
-.singleRow {
-  display: flex;
 }
 
 .col1Layout {
@@ -19,7 +9,7 @@
 }
 
 .col1 {
-  border-style: none solid none none;
+  border-right: solid;
   border-color: #fff;
 }
 
@@ -29,7 +19,16 @@
 }
 
 .col2 {
-  border-style: none solid none none;
+  border-right: solid;
   border-color: #fff;
+}
+
+.bottomBorder {
+  border-bottom: solid;
+  border-color: #fff;
+}
+
+.tableBody {
+  text-align: center;
 }
 
