@@ -33,6 +33,33 @@ export default class CapitalChallengeDB extends DatabaseConnect {
   }
 
   @UseAspect(Advice.Before, LoggingAspect)
+  async updateCountry(country: string, updatedData: Record<string, any>): Promise<WorldCapitals | null> {
+    try {
+      const existingCountry = await this.prismaClient.worldCapitals.findUnique({
+        where: {
+          country: country
+        }
+      });
+  
+      if (!existingCountry) {
+        throw new Error(`Country '${country}' not found.`);
+      }
+  
+      const updatedCountry = await this.prismaClient.worldCapitals.update({
+        where: {
+          country: country
+        },
+        data: updatedData
+      });
+  
+      return updatedCountry;
+    } catch (error) {
+      console.error(`Error updating country: ${error}`);
+      return null;
+    }
+  }
+
+  @UseAspect(Advice.Before, LoggingAspect)
   async dropCollection(): Promise<void> {
     try {
       await this.prismaClient.worldCapitals.deleteMany();
