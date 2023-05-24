@@ -1,7 +1,7 @@
 export type TQuestObj = {
   country: string;
   capital: string[];
-  XYAxisOnMap?: number[];
+  YXAxisOnMap?: number[];
 }
 
 export type TAnswerRecord = Array<TQuestObj & {timeSpent: number}>;

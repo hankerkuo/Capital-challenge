@@ -7,6 +7,7 @@ import QuestOption from './answerForm/QuestOption';
 import StartButton from 'src/components/answerForm/StartButton';
 import AnswerRecord from 'src/components/dashboard/AnswerRecord';
 import PopupNotification from 'src/components/notification/PopupNotification';
+import ErrorNotification from './notification/ErrorNotification';
 import LoginWrapper from './account/LoginWrapper';
 import WorldMap from './worldMap/WorldMap';
 
@@ -18,11 +19,11 @@ import { QuestActionEnum } from 'src/reducer/QuestState.reducer';
 import { CurrentUserContext } from 'src/pages/capital-challenge';
 import Logger from 'src/utils/Logger';
 
-import styles from 'src/styles/components/CapitalMainWidget.module.css'
+import styles from 'src/styles/components/CapitalMainWidget.module.css';
 
 const CapitalMainWidget = () => {
   // current user
-  const {user} = useContext(CurrentUserContext);
+  const { user } = useContext(CurrentUserContext);
   // quest amount state
   const [questAmount, setQuestAmount] = useState<number>(1);
   // quest data fetch
@@ -30,6 +31,7 @@ const CapitalMainWidget = () => {
   // input ref to manipulate due to different game status
   const inputEle = useRef<HTMLInputElement>(null);
   // state for tracking each anwser's spent time (display on the screen)
+  // TODO: [performance] this timer is causing lots of full component re-rendering, need to fix
   const { timer, startTimer, stopTimer } = useTimer(10);
   // show game ends notification
   const [notifyGameEnd, setNotifyGameEnd] = useState<boolean>(true);
@@ -38,22 +40,22 @@ const CapitalMainWidget = () => {
     quest: { country: '', capital: [''] },
     answerRecord: [],
     gameOngoing: false,
-    remainQuest: []
+    remainQuest: [],
   });
 
   const actions = {
-    quests: quests ? quests: [],
+    quests: quests ? quests : [],
     inputEle,
     timer,
     startTimer,
-    stopTimer
-  }
+    stopTimer,
+  };
 
   const startNewGame = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.textContent = 'Start again';
     refetch();
     gameUpdate({ type: QuestActionEnum.START, ...actions });
-  }
+  };
 
   const checkAnswer = (e: ChangeEvent<HTMLInputElement>) => {
     // initialize the game on first typing
@@ -61,7 +63,7 @@ const CapitalMainWidget = () => {
       gameUpdate({ type: QuestActionEnum.TYPE_TO_START, ...actions });
     }
     let answerMatched = false;
-    questState.quest.capital.forEach(capitalName => {
+    questState.quest.capital.forEach((capitalName) => {
       // TODO: add toleration of special characters
       // e.g. São Tomé, should be matched by a or e
       if (e.target.value.toLowerCase() === capitalName.toLowerCase()) {
@@ -80,35 +82,45 @@ const CapitalMainWidget = () => {
         setNotifyGameEnd((prev) => !prev);
       }
     }
-  }
-
+  };
 
   return (
     <div className={`${styles.mainWidgetLyt} ${styles.mainWidget}`}>
       {/* {isLoading && <div>loading</div>} */}
-      {isError && <div>Error fetching data</div>}
+      {isError && <ErrorNotification text='Error fetching data' />}
       <div className={styles.leftRegionLyt}>
-        <QuestAndHint quest={questState.quest} 
-          timer={timer} showBlur={Object.keys(questState.remainQuest).length === 0}/>
+        <QuestAndHint
+          quest={questState.quest}
+          timer={timer}
+          showBlur={Object.keys(questState.remainQuest).length === 0}
+        />
         <AnswerInput {...{ inputEle, checkAnswer }} />
         {/* TODO: re-fetch data on start button */}
         <div className={`${styles.buttonContainerLyt}`}>
           <QuestOption setTargetQuestAmount={setQuestAmount} />
-          <StartButton {...{ questState, startNewGame, timer, pending: isLoading}} />
+          <StartButton
+            {...{ questState, startNewGame, timer, pending: isLoading }}
+          />
         </div>
-        <WorldMap />
+        <WorldMap
+          y={questState.quest.YXAxisOnMap?.[0] ?? null}
+          x={questState.quest.YXAxisOnMap?.[1] ?? null}
+        />
       </div>
       <div className={`${styles.rightRegionLyt} ${styles.rightRegion}`}>
         <AnswerRecord answerRecord={questState.answerRecord} />
       </div>
       <div>
-        <PopupNotification renewSignal={notifyGameEnd} text={'Game Completed and recorded!'}/>
+        <PopupNotification
+          renewSignal={notifyGameEnd}
+          text={'Game Completed and recorded!'}
+        />
       </div>
       <div>
-        <LoginWrapper user={user}/>
+        <LoginWrapper user={user} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CapitalMainWidget
+export default CapitalMainWidget;

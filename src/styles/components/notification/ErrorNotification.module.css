@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap');
+
+.container {
+  position: fixed;
+  top: 3rem;
+  right: 1rem;
+  border-style: solid;
+  border-width: thin;
+  border-radius: 0.5rem;
+  border-color: #5348DF;
+  background-color: rgb(241, 71, 71);
+}
+
+.font {
+  padding: 0.5rem;
+  color: #fff;
+  font-family: Space Grotesk,sans-serif;
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  width: 30px;
+  height: 30px;
+  font-size: 0;
+}
+
+.closeButton:before, 
+.closeButton:after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 15px;
+    background-color: #fff;
+    transform: rotate(45deg) translate(-50%, -50%);
+    transform-origin: top left;
+    transition: all 420ms;
+    content: '';
+}
+
+.closeButton:after {
+    transform: rotate(-45deg) translate(-50%, -50%);
+}

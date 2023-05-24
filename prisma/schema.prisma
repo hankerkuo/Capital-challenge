@@ -11,5 +11,5 @@ model WorldCapitals {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   capital String[]
   country String @unique
-  XYAxisOnMap Float[] 
+  YXAxisOnMap Float[] 
 }

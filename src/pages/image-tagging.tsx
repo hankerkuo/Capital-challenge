@@ -30,7 +30,7 @@ const WorldMapForm: React.FC = () => {
   const imageRef = useRef<HTMLImageElement>(null);
 
   const filteredQuests = useMemo(() => {
-    return quests?.filter((quest) => quest.XYAxisOnMap?.length === 0);
+    return quests?.filter((quest) => quest.YXAxisOnMap?.length === 0);
   }, [quests]);
   console.log(filteredQuests);
 

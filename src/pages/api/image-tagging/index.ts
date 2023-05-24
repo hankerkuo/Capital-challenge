@@ -13,7 +13,7 @@ export default async function handler(
   Logger.log('req.body', body.country);
   const countryCapitalAPI = new CountryCapitalAPI();
   const result = await countryCapitalAPI.updateCountry(body.country, {
-    XYAxisOnMap: [body.y, body.x],
+    YXAxisOnMap: [body.y, body.x],
   });
   // const result = {abc: 123};
   res.status(200).json(result);

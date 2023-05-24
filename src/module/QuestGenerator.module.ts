@@ -8,13 +8,14 @@ import type { TQuestObj } from "src/types/TQuest"
 
 class QuestGenerator {
 
-  static getOneKeyValueFromArray =
-    (array: Array<TQuestObj>): { key: string; value: string[] } | null => {
+  static getOneFromQuests =
+    (array: Array<TQuestObj>): TQuestObj | null => {
       const random = RandomUtil.getOneFromArray(array);
       if (random) {
         return {
-          key: random.country,
-          value: random.capital
+          country: random.country,
+          capital: random.capital,
+          YXAxisOnMap: random.YXAxisOnMap,
         }
       } else {
         return null;
