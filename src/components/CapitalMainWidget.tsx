@@ -62,11 +62,33 @@ const CapitalMainWidget = () => {
     if (!questState.gameOngoing) {
       gameUpdate({ type: QuestActionEnum.TYPE_TO_START, ...actions });
     }
+    let userAnswer = e.target.value;
     let answerMatched = false;
     questState.quest.capital.forEach((capitalName) => {
-      // TODO: add toleration of special characters
-      // e.g. São Tomé, should be matched by a or e
-      if (e.target.value.toLowerCase() === capitalName.toLowerCase()) {
+      /**
+       * STEP1. string normalization
+       * Toleration of special characters
+       * e.g. São Tomé, should be matched by a or e
+       * 
+       * Here the time complexity is O(k*m + k*n), 
+       * where k is the number of special characters
+       * m is the length of capital name, n is the length of user answer
+       * 
+       * Potential improvement:
+       * write the compare logic not using string, but using array of char
+       * check each char and leverage the toleranceMap to normalize it
+       * so that the time complexity will be O(max(m, n)))
+       */
+      const toleranceMap: {[keys: string]: string} = {
+        'ã': 'a',
+        'é': 'e',
+      }
+      Object.keys(toleranceMap).forEach(char => {
+        userAnswer = userAnswer.replaceAll(char, toleranceMap[char]);
+        capitalName = capitalName.replaceAll(char, toleranceMap[char]);
+      });
+      // STEP2. compare the answer
+      if (userAnswer.toLowerCase() === capitalName.toLowerCase()) {
         answerMatched = true;
       }
     });
