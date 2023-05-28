@@ -17,10 +17,13 @@ const WorldMap = (props: Props) => {
   }, [props.y, props.x]);
   return (
     <div className={`${styles.container}`}>
-      <img
-        className={`${styles.mapLyt}`}
-        src='/world-map/shokunin_World_Map.svg'
-      />
+      <picture>
+        <img
+          className={`${styles.mapLyt}`}
+          src='/world-map/shokunin_World_Map.svg'
+          alt='World Map'
+        />
+      </picture>
       {props.x && props.y ? (
         <div ref={circleRef} className={`${styles.circle}`}></div>
       ) : null}

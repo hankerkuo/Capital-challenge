@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, use } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import useQuestfetch from 'src/hooks/useQuestfetch';
 import PopupNotification from 'src/components/notification/PopupNotification';
 import ErrorNotification from 'src/components/notification/ErrorNotification';
@@ -169,16 +169,18 @@ const WorldMapForm: React.FC = () => {
         />
       </div>
       <div className={`${styles.imageContainerPos}`}>
-        <img
-          src='/world-map/shokunin_World_Map.svg'
-          alt='World Map'
-          onClick={handleMapClick}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          ref={imageRef}
-          width='1000'
-        />
+        <picture>
+          <img
+            src='/world-map/shokunin_World_Map.svg'
+            alt='World Map'
+            onClick={handleMapClick}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            ref={imageRef}
+            width='1000'
+          />
+        </picture>
         <div
           className={`${styles.clickCircle}`}
           style={{ left: formData.offsetX, top: formData.offsetY }}
