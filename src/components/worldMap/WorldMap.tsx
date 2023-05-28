@@ -9,7 +9,6 @@ type Props = {
   x: number | null;
 };
 const WorldMap = (props: Props) => {
-  console.log(props.y, props.x);
   const circleRef = useRef(null);
   useEffect(() => {
     if (circleRef.current) {
@@ -20,7 +19,7 @@ const WorldMap = (props: Props) => {
   }, [props.y, props.x])
   return (
     <div className={`${styles.container}`}>
-      <img src='/world-map/shokunin_World_Map.svg' />
+      <img className={`${styles.mapLyt}`} src='/world-map/shokunin_World_Map.svg' />
       {props.x && props.y ? <div ref={circleRef} className={`${styles.circle}`}></div> : null}
     </div>
   );

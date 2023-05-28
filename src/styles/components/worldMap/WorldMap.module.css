@@ -1,7 +1,12 @@
 .container {
   position: relative;
   width: 100%;
-  height: 128px;
+}
+
+.mapLyt {
+  /* Here is important to let the outer container know the height of the map
+  default image display is inline-block */
+  display: block;
 }
 
 .circle {
