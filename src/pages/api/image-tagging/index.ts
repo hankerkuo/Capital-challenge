@@ -18,7 +18,7 @@ export default async function handler(
     });
   }
   // TODO: make the admin user list in the database
-  if (!session.user || session.user.email !== 'hankerkuo@gmail.comm') {
+  if (!session.user || session.user.email !== 'hankerkuo@gmail.com') {
     Logger.log(
       '[image-tagging]',
       'Block unauthorized user:',
