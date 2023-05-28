@@ -1,6 +1,7 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, use } from 'react';
 import useQuestfetch from 'src/hooks/useQuestfetch';
 import PopupNotification from 'src/components/notification/PopupNotification';
+import ErrorNotification from 'src/components/notification/ErrorNotification';
 import styles from 'src/styles/ImageTagging.module.css';
 
 interface FormData {
@@ -25,6 +26,7 @@ const WorldMapForm: React.FC = () => {
     offsetY: 0,
   });
   const [renewSignal, setRenewSignal] = useState(false);
+  const [submitErrMsg, setSubmitErrMsg] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const clickCircleRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -34,13 +36,20 @@ const WorldMapForm: React.FC = () => {
   }, [quests]);
   console.log(filteredQuests);
 
-  const handleFormSubmit = async(event: React.FormEvent) => {
+  const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     // Send formData to the backend for further processing
     // post to backend
-    await fetch('/api/image-tagging', {method: 'POST', body: JSON.stringify(formData)});
-    console.log(formData);
-    setRenewSignal(!renewSignal);
+    const res = await fetch('/api/image-tagging', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    });
+    if (res.status !== 200) {
+      setSubmitErrMsg((await res.json()).error);
+    } else {
+      console.log(formData);
+      setRenewSignal(!renewSignal);
+    }
   };
 
   const handleMapClick = (event: React.MouseEvent<HTMLImageElement>) => {
@@ -183,7 +192,17 @@ const WorldMapForm: React.FC = () => {
         </button>
       </div>
       <div>
-        <PopupNotification renewSignal={renewSignal} text={'update map success'}/>
+        <PopupNotification
+          renewSignal={renewSignal}
+          text={'update map success'}
+        />
+        {submitErrMsg !== '' && (
+          <ErrorNotification
+            text={submitErrMsg}
+            onCloseCallBack={setSubmitErrMsg}
+            onCloseCallBackArgs={''}
+          />
+        )}
       </div>
     </form>
   );
