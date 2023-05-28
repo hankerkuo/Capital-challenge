@@ -35,7 +35,7 @@ export default class CapitalChallengeDB extends DatabaseConnect {
   @UseAspect(Advice.Before, LoggingAspect)
   async updateCountry(country: string, updatedData: Record<string, any>): Promise<WorldCapitals | null> {
     try {
-      const existingCountry = await this.prismaClient.worldCapitals.findFirst({
+      const existingCountry = await this.prismaClient.worldCapitals.findUnique({
         where: {
           country: country
         }
