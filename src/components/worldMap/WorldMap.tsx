@@ -25,7 +25,11 @@ const WorldMap = (props: Props) => {
         />
       </picture>
       {props.x && props.y ? (
-        <div ref={circleRef} className={`${styles.circle}`}></div>
+        <div
+          data-testid='circle'
+          ref={circleRef}
+          className={`${styles.circle}`}
+        ></div>
       ) : null}
     </div>
   );
