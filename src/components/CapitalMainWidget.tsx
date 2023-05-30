@@ -82,6 +82,7 @@ const CapitalMainWidget = () => {
       const toleranceMap: {[keys: string]: string} = {
         'ã': 'a',
         'é': 'e',
+        'ó': 'o',
       }
       Object.keys(toleranceMap).forEach(char => {
         userAnswer = userAnswer.replaceAll(char, toleranceMap[char]);
