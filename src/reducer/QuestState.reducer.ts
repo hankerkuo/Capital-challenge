@@ -38,10 +38,11 @@ const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) =>
       action.inputEle.current!.disabled = false;
       action.inputEle.current!.placeholder = 'TYPE YOUR ANSWER';
       const randomStartQuest = 
-        QuestGenerator.getOneKeyValueFromArray(action.quests);
+        QuestGenerator.getOneFromQuests(action.quests);
       return { ...state, remainQuest: action.quests, answerRecord: [], quest: {
-        country: randomStartQuest!.key,
-        capital: randomStartQuest!.value
+        country: randomStartQuest!.country,
+        capital: randomStartQuest!.capital,
+        YXAxisOnMap: randomStartQuest!.YXAxisOnMap,
       } };
     case QuestActionEnum.ANSWER_MATCHED:
       // add answered record
@@ -69,11 +70,12 @@ const QuestStateReducer: Reducer<TQuestState, TQuestAction> = (state, action) =>
       return { ...state, gameOngoing: false };
     case QuestActionEnum.NEXT_QUEST:
       const randomQuestion = 
-        QuestGenerator.getOneKeyValueFromArray(state.remainQuest);
+        QuestGenerator.getOneFromQuests(state.remainQuest);
       return {
         ...state, quest: {
-          country: randomQuestion!.key,
-          capital: randomQuestion!.value
+          country: randomQuestion!.country,
+          capital: randomQuestion!.capital,
+          YXAxisOnMap: randomQuestion!.YXAxisOnMap,
         }
       };
     case QuestActionEnum.TYPE_TO_START:

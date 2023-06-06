@@ -1,0 +1,34 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.mapLyt {
+  /* Here is important to let the outer container know the height of the map
+  default image display is inline-block */
+  display: block;
+}
+
+.circle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: hsl(244, 79%, 70%); /* Set your desired circle color */
+  animation: sparkle 2s infinite;
+}
+
+@keyframes sparkle {
+  0% {
+    opacity: 0.1;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.1;
+    transform: scale(0.5);
+  }
+}

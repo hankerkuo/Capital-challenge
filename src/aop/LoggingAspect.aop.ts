@@ -1,4 +1,5 @@
 import { Aspect, AspectContext } from 'ts-aspect';
+import Logger from 'src/utils/Logger';
 
 export default class LoggingAspect implements Aspect {
   execute(ctx: AspectContext): any {
@@ -10,15 +11,13 @@ export default class LoggingAspect implements Aspect {
     } catch(e) {
       // incase circular reference appearing in ctx object
       if (e instanceof TypeError) {
-        console.log('[Aspect logging Error] \
-          Failed trasforming context to json, log function name only');
-        // console.error(e);
+        Logger.log('[Aspect logging notice]', 
+          'Failed trasforming context to json, log function name only');
         metaData = JSON.stringify(ctx.methodName);
       } else {
-        console.error(e);
+        Logger.error(e);
       }
     }
-    console.log(`[Aspect logging] ${new Date().toJSON()} \
-      Function call meta data: ${metaData}`);
+    Logger.log(`[Aspect logging] Function call meta data: ${metaData}`);
   }
 }

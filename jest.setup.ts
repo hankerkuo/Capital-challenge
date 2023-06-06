@@ -1,15 +1,18 @@
 // src/setupTests.js
-import { server } from 'src/mocks/server'
-import { cleanup } from '@testing-library/react'
+import { server } from 'src/mocks/server';
+import { cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 // Establish API mocking before all tests.
-beforeAll(() => server.listen())
+beforeAll(() => {
+  server.listen();
+});
 // Reset any request handlers that we may add during the tests,
 // so they don't affect other tests.
 afterEach(() => {
   server.resetHandlers();
   // clean up rendered components in each test
   cleanup();
-})
+});
 // Clean up after the tests are finished.
-afterAll(() => server.close())
+afterAll(() => server.close());
