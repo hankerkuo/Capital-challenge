@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from 'src/pages/api/auth/[...nextauth]';
 
 import CountryCapitalAPI from 'src/service/CountryCapitalAPI.service';
+import { isAdministrator } from 'src/utils/auth/PrivilegeCheck';
 import Logger from 'src/utils/Logger';
 
 export default async function handler(
@@ -17,8 +18,8 @@ export default async function handler(
       error: 'You must be signed in to access the resource.',
     });
   }
-  // TODO: make the admin user list in the database
-  if (!session.user || session.user.email !== 'hankerkuo@gmail.com') {
+  // TODO: better use authentication middleware to handle all the routes
+  if (!isAdministrator(session)) {
     Logger.log(
       '[image-tagging]',
       'Block unauthorized user:',
