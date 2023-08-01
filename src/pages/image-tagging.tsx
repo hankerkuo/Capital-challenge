@@ -1,7 +1,11 @@
 import React, { useState, useMemo, useRef } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+
 import useQuestfetch from 'src/hooks/useQuestfetch';
 import PopupNotification from 'src/components/notification/PopupNotification';
 import ErrorNotification from 'src/components/notification/ErrorNotification';
+import { isAdministrator } from 'src/utils/auth/PrivilegeCheck';
 import styles from 'src/styles/ImageTagging.module.css';
 
 interface FormData {
@@ -13,8 +17,17 @@ interface FormData {
   offsetY: number;
 }
 
-//TODO: [Important] do privilege gating
 const WorldMapForm: React.FC = () => {
+
+  // use next auth to do privilege gating
+  const { data: session, status } = useSession();
+  if (typeof window !== 'undefined') {
+    if (status !== 'loading' && !isAdministrator(session)) {
+      const router = useRouter();
+      router.push('/403');
+    } 
+  }
+  
   const { quests, isLoading, isError, refetch } = useQuestfetch(197);
   const [currentQuestIndex, setCurrentQuestIndex] = useState(0);
   const [formData, setFormData] = useState<FormData>({
@@ -112,7 +125,9 @@ const WorldMapForm: React.FC = () => {
       }));
     }
   };
-
+  if (status === 'loading' || !isAdministrator(session)) {
+    return <></>;
+  }
   return (
     <form onSubmit={handleFormSubmit} className={`${styles.font}`}>
       <div>
