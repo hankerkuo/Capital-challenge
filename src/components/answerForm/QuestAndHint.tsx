@@ -81,6 +81,7 @@ const QuestAndHint = ({
       ref={titleRef}
       style={{ fontSize: titleFontSize }}
     >
+      {/* TODO: support for multi-language */}
       {showBlur ? (
         <p
           className={`${styles.hintCharBlur} ${styles.hintCharLyt} ${styles.titlePLyt}`}
