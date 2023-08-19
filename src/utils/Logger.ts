@@ -4,6 +4,6 @@ export default class Logger {
   }
 
   public static error(...args: any[]) {
-    console.error(new Date().toJSON(), ...args);
+    console.error('[ERROR]', new Date().toJSON(), ...args);
   }
 }

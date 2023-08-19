@@ -18,15 +18,6 @@ interface FormData {
 }
 
 const WorldMapForm: React.FC = () => {
-
-  // use next auth to do privilege gating
-  const { data: session, status } = useSession();
-  if (typeof window !== 'undefined') {
-    if (status !== 'loading' && !isAdministrator(session)) {
-      const router = useRouter();
-      router.push('/403');
-    } 
-  }
   
   const { quests, isLoading, isError, refetch } = useQuestfetch(197);
   const [currentQuestIndex, setCurrentQuestIndex] = useState(0);
@@ -125,9 +116,6 @@ const WorldMapForm: React.FC = () => {
       }));
     }
   };
-  if (status === 'loading' || !isAdministrator(session)) {
-    return <></>;
-  }
   return (
     <form onSubmit={handleFormSubmit} className={`${styles.font}`}>
       <div>
