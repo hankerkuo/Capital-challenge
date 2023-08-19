@@ -29,6 +29,7 @@ describe('Logger', () => {
   it('should log error messages with a timestamp using the error method', () => {
     const args = ['Error message'];
     const expectedErrorOutput = [
+      '[ERROR]',
       expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/),
       ...args,
     ];
